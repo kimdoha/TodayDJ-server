@@ -32,6 +32,16 @@ module.exports = {
 
     USER_STATUS_EMPTY : { "isSuccess": false, "code": 2018, "message": "회원 상태값을 입력해주세요" },
 
+    // folder
+    FOLDER_ID_EMPTY : { "isSuccess": false, "code": 2019, "message": "folder ID를 입력해주세요" },
+    FOLDER_NAME_EMPTY : { "isSuccess": false, "code": 2020, "message": "folder 이름을 입력해주세요" },
+    INPUT_NUMBER : { "isSuccess": false, "code": 2021, "message": "숫자로 입력해주세요" },
+    SET_FOLDER_NAME : { "isSuccess": false, "code": 2022, "message": "폴더 이름 3~20자로 입력해주세요" },
+
+    // feeling
+    FEELING_EMPTY : { "isSuccess": false, "code": 2023, "message": "기분 인덱스를 입력해주세요" },
+    FEELING_ID_EXCEED : { "isSuccess": false, "code": 2024, "message": "기분 인덱스 범위를 벗어났습니다" },
+
     // Response error
     SIGNUP_REDUNDANT_EMAIL : { "isSuccess": false, "code": 3001, "message":"중복된 이메일입니다." },
     SIGNUP_REDUNDANT_NICKNAME : { "isSuccess": false, "code": 3002, "message":"중복된 닉네임입니다." },
@@ -41,6 +51,7 @@ module.exports = {
     SIGNIN_INACTIVE_ACCOUNT : { "isSuccess": false, "code": 3005, "message": "비활성화 된 계정입니다. 고객센터에 문의해주세요." },
     SIGNIN_WITHDRAWAL_ACCOUNT : { "isSuccess": false, "code": 3006, "message": "탈퇴 된 계정입니다. 고객센터에 문의해주세요." },
 
+    EMPTY_WEATHER_RESULT : { "isSuccess": false, "code": 3007, "message": "날씨 조회 실패" },
     //Connection, Transaction 등의 서버 오류
     DB_ERROR : { "isSuccess": false, "code": 4000, "message": "데이터 베이스 에러"},
     SERVER_ERROR : { "isSuccess": false, "code": 4001, "message": "서버 에러"},
