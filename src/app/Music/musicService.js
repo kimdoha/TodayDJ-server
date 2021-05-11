@@ -159,3 +159,37 @@ exports.updateFeeling = async function (feelNum) {
     }
 };
 
+
+// 개인 정보 저장 
+exports.setType= async function (type1, type2) {
+    try {
+
+        const connection = await pool.getConnection(async (conn) => conn);
+        console.log("before");
+        const userResult = await musicDao.setType(connection, type1, type2);
+        console.log(`추가된 회원 : ${userResult.insertId}`)
+        connection.release();
+        return response({ "isSuccess": true, "code": 1000, "message":"사용자 타입 저장 성공" }, { "type1": type1, "type2":type2 });
+
+    } catch (err) {
+        logger.error(`App - SetType Service error\n: ${err.message}`);
+        return errResponse(baseResponse.DB_ERROR);
+    }
+};
+
+
+exports.updateType = async function (type1, type2) {
+    try {
+
+        const connection = await pool.getConnection(async (conn) => conn);
+        console.log("before");
+        const userResult = await musicDao.updateType(connection, type1, type2);
+        console.log(`추가된 회원 : ${userResult.insertId}`)
+        connection.release();
+        return response({ "isSuccess": true, "code": 1000, "message":"사용자 타입 저장 성공" }, { "type1": type1, "type2":type2 });
+
+    } catch (err) {
+        logger.error(`App - UpdateType Service error\n: ${err.message}`);
+        return errResponse(baseResponse.DB_ERROR);
+    }
+};

@@ -69,3 +69,88 @@ exports.retrieveWeatherMusic = async function () {
 
   return existResult;
 }
+
+// 개인 정보 조회
+
+exports.existUser = async function () {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const userResult = await musicDao.existUser(connection);
+
+  connection.release();
+
+  return userResult;
+}
+
+// feeling
+exports.retrieveFeeling = async function () {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const [feelingResult] = await musicDao.retrieveFeeling(connection);
+
+  connection.release();
+
+  return feelingResult;
+}
+
+exports.retrieveFeelingMusic1 = async function () {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const feelingResult = await musicDao.retrieveFeelingMusics1(connection);
+
+  connection.release();
+
+  return feelingResult;
+}
+
+exports.retrieveFeelingMusic2 = async function () {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const feelingResult = await musicDao.retrieveFeelingMusics2(connection);
+
+  connection.release();
+
+  return feelingResult;
+}
+exports.retrieveFeelingMusic3 = async function () {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const feelingResult = await musicDao.retrieveFeelingMusics3(connection);
+
+  connection.release();
+
+  return feelingResult;
+}
+exports.retrieveFeelingMusic4 = async function () {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const feelingResult = await musicDao.retrieveFeelingMusics4(connection);
+
+  connection.release();
+
+  return feelingResult;
+}
+
+exports.retrieveSadType = async function () {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const [sadResult] = await musicDao.retrieveSadType(connection);
+
+  connection.release();
+
+  return sadResult;
+}
+
+// ANGRY
+exports.retrieveAngryType = async function () {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const [angryResult] = await musicDao.retrieveAngryType(connection);
+
+  connection.release();
+
+  return angryResult;
+}
+
+
+exports.retrieveFeelingMusic5 = async function () {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const feelingResult = await musicDao.retrieveFeelingMusics5(connection);
+
+  connection.release();
+
+  return feelingResult;
+}
+

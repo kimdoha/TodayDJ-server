@@ -72,7 +72,7 @@ async function updateWeather(connection, weatherName, area) {
 
 async function existFeeling(connection) {
   const existQuery = `
-  SELECT EXISTS(SELECT * FROM Feeling WHERE DATE(createAt) = CURRENT_DATE) AS exist;
+      SELECT EXISTS(SELECT * FROM Feeling WHERE DATE(createAt) = CURRENT_DATE) AS exist;
     `;
   const [existRows] = await connection.query(existQuery);
   return existRows;
@@ -95,6 +95,111 @@ async function updateFeeling(connection, feelNum) {
   return FeelingRow;
 }
 
+// User 정보 
+async function existUser(connection) {
+  const existQuery = `
+  SELECT EXISTS(SELECT * FROM User);
+    `;
+  const [existRows] = await connection.query(existQuery);
+  return existRows;
+}
+
+// User 설정
+async function setType(connection, type1, type2) {
+  const addTypequery = `
+  INSERT INTO User(sadType1, angryType2) VALUES (?, ?);
+      `;
+  const [typeRow] = await connection.query(addTypequery, [type1, type2]);
+  return typeRow;
+}
+
+async function updateType(connection, type1, type2) {
+  const updateTypequery = `
+    UPDATE User SET sadType1 = ?, angryType2 = ?;
+      `;
+  const [typeRow] = await connection.query(updateTypequery, [type1, type2]);
+  return typeRow;
+}
+
+// feeling
+async function retrieveFeeling(connection) {
+  const feelingquery = `
+  SELECT feeling FROM Feeling WHERE DATE(createAt) = CURRENT_DATE();
+      `;
+  const [feelingRow] = await connection.query(feelingquery);
+  return feelingRow;
+}
+
+async function retrieveFeelingMusics1(connection) {
+  const feelingquery = `
+  SELECT * FROM Music WHERE genre IN ('아이돌' ,'댄스팝' ,'랩힙합', '인디', '포크어쿠스틱')
+                      AND musicId NOT IN (SELECT DISTINCT musicId FROM Recommend)
+  ORDER BY RAND()
+  LIMIT 1;
+      `;
+  const [feelingRow] = await connection.query(feelingquery);
+  return feelingRow;
+}
+async function retrieveFeelingMusics2(connection) {
+  const feelingquery = `
+  SELECT * FROM Music WHERE genre IN ('알앤비소울' ,'발라드' , '인디', '포크어쿠스틱')
+                      AND musicId NOT IN (SELECT DISTINCT musicId FROM Recommend)
+  ORDER BY RAND()
+  LIMIT 1;
+
+      `;
+  const [feelingRow] = await connection.query(feelingquery);
+  return feelingRow;
+}
+async function retrieveFeelingMusics3(connection) {
+  const feelingquery = `
+  SELECT * FROM Music WHERE genre IN ('알앤비소울' ,'발라드' , '재즈')
+  AND musicId NOT IN (SELECT DISTINCT musicId FROM Recommend)
+  ORDER BY RAND()
+  LIMIT 1;
+
+      `;
+  const [feelingRow] = await connection.query(feelingquery);
+  return feelingRow;
+}
+async function retrieveFeelingMusics4(connection) {
+  const feelingquery = `
+  SELECT * FROM Music WHERE genre IN ('아이돌' ,'댄스팝' ,'랩힙합', '인디', '포크어쿠스틱')
+                      AND musicId NOT IN (SELECT DISTINCT musicId FROM Recommend)
+  ORDER BY RAND()
+  LIMIT 1;
+      `;
+  const [feelingRow] = await connection.query(feelingquery);
+  return feelingRow;
+}
+
+async function retrieveSadType(connection) {
+  const sadquery = `
+    SELECT sadType1 FROM User;
+      `;
+  const [sadRow] = await connection.query(sadquery);
+  return sadRow;
+}
+
+async function retrieveAngryType(connection) {
+  const angryquery = `
+      SELECT angryType2 FROM User;
+      `;
+  const [angryRow] = await connection.query(angryquery);
+  return angryRow;
+}
+
+async function retrieveFeelingMusic5(connection) {
+  const feelingquery = `
+  SELECT * FROM Music WHERE genre IN ('락메탈' ,'일렉트로닉')
+  AND musicId NOT IN (SELECT DISTINCT musicId FROM Recommend)
+  ORDER BY RAND()
+  LIMIT 1;
+      `;
+  const [feelingRow] = await connection.query(feelingquery);
+  return feelingRow;
+}
+
 // 유저 생성
 async function insertUserInfo(connection, insertUserInfoParams) {
   const insertUserInfoQuery = `
@@ -115,5 +220,17 @@ module.exports = {
   updateWeather,
   existFeeling,
   setFeeling,
-  updateFeeling
+  updateFeeling,
+  existUser,
+  setType,
+  updateType,
+  retrieveFeeling,
+  retrieveFeelingMusics1,
+  retrieveFeelingMusics2,
+  retrieveFeelingMusics3,
+  retrieveFeelingMusics4,
+  retrieveSadType,
+  retrieveAngryType,
+  retrieveFeelingMusic5,
+
 };

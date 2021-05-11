@@ -42,6 +42,11 @@ module.exports = {
     FEELING_EMPTY : { "isSuccess": false, "code": 2023, "message": "기분 인덱스를 입력해주세요" },
     FEELING_ID_EXCEED : { "isSuccess": false, "code": 2024, "message": "기분 인덱스 범위를 벗어났습니다" },
 
+    // type
+    TYPE_EMPTY : { "isSuccess": false, "code": 2025, "message": "타입을 입력해주세요" },
+    TYPE_RANGE : { "isSuccess": false, "code": 2026, "message": "타입 범위를 벗어났습니다" },
+    
+    
     // Response error
     SIGNUP_REDUNDANT_EMAIL : { "isSuccess": false, "code": 3001, "message":"중복된 이메일입니다." },
     SIGNUP_REDUNDANT_NICKNAME : { "isSuccess": false, "code": 3002, "message":"중복된 닉네임입니다." },

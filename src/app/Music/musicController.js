@@ -94,7 +94,7 @@ exports.getWeather = async function (req, res) {
             }
             else{
                 console.log(currentWeather);
-                weatherName = currentWeather.weather[0].description;
+                weatherName = currentWeather.weather[0].main;
                 area = currentWeather.name;
                 weather = async function (req, res) {
                     const [checkStatus] = await musicProvider.existWeather();
@@ -229,4 +229,81 @@ exports.weatherMusics = async function (req, res) {
     }
 
     return res.send(response({ "isSuccess": true, "code": 1000, "message":"날씨별 음악 조회 성공" }, weatherMusics));
+};
+
+
+/**
+ * API No. 11
+ * API Name : 입력한 기분 저장 API
+ * [POST] /user/:type1/:type2
+ */
+ exports.setUser = async function (req, res) {
+    const type1 = req.params.type1;
+    const type2 = req.params.type2;
+
+    if(!type1 || !type2)
+        return res.send(response(baseResponse.TYPE_EMPTY ));
+
+    // 숫자 형식 체크
+    var regExp = /^[0-9]+$/;
+    if(!regExp.test(type1) || !regExp.test(type2))
+        return res.send(response(baseResponse.INPUT_NUMBER));
+    
+    if((type1 < 1 || type1 > 2) || (type2 < 1 || type2 > 2))
+        return res.send(response(baseResponse.TYPE_RANGE));
+    
+    const [checkStatus] = await musicProvider.existUser();
+    console.log(checkStatus);
+
+    if (checkStatus.exist == 0) {
+        const addType = await musicService.setType(type1, type2);
+        return res.send(addType);
+    } else {
+        const updateType = await musicService.updateType(type1, type2);
+        return res.send(updateType);
+    }
+};
+
+/**
+ * API No. 3
+ * API Name : 입력한 기분을 바탕으로 추천 음악 조회
+ * [GET] /feeling/music
+ */
+// 익사이팅 해피 쏘쏘 새드 앵그리 (1, 2, 3, 4, 5)
+exports.feelingMusics = async function (req, res) {
+
+    const feeling = await musicProvider.retrieveFeeling();
+    // if(!feeling)
+    //     return res.send(baseResponse.);
+
+    
+    var feelingMusics = {};
+    if(feeling.feeling === 1 || feeling.feeling === 2){
+        feelingMusics = await musicProvider.retrieveFeelingMusic1();
+        console.log(feelingMusics[0].musicName);
+        const YoutubeMusicApi = require('youtube-music-api');
+        const api = new YoutubeMusicApi();
+        api.initalize() // Retrieves Innertube Config
+        .then(info => {
+            api.search(feelingMusics[0].musicName, "video").then(result => console.log(result)) // just search for songs
+        });
+    } else if(feeling.feeling === 3){
+        feelingMusics = await musicProvider.retrieveFeelingMusic2();
+    } else if(feeling.feeling === 4){
+        const type = await musicProvider.retrieveSadType();
+        if(type === 1){
+            feelingMusics = await musicProvider.retrieveFeelingMusic3();
+        } else if(type === 2){
+            feelingMusics = await musicProvider.retrieveFeelingMusic4();
+        }
+    } else if(feeling.feeling === 5){
+        const type = await musicProvider.retrieveAngryType();
+        if(type === 1){
+            feelingMusics = await musicProvider.retrieveFeelingMusic5();
+        } else if(type === 2){
+            feelingMusics = await musicProvider.retrieveFeelingMusic3();
+        }
+    }
+
+    return res.send(response({ "isSuccess": true, "code": 1000, "message":"기분별 음악 조회 성공" }, feelingMusics));
 };
