@@ -200,6 +200,7 @@ async function retrieveFeelingMusic5(connection) {
   return feelingRow;
 }
 
+
 // 유저 생성
 async function insertUserInfo(connection, insertUserInfoParams) {
   const insertUserInfoQuery = `
@@ -231,6 +232,5 @@ module.exports = {
   retrieveFeelingMusics4,
   retrieveSadType,
   retrieveAngryType,
-  retrieveFeelingMusic5,
-
+  retrieveFeelingMusic5
 };

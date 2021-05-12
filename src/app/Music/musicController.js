@@ -273,37 +273,269 @@ exports.weatherMusics = async function (req, res) {
 exports.feelingMusics = async function (req, res) {
 
     const feeling = await musicProvider.retrieveFeeling();
-    // if(!feeling)
-    //     return res.send(baseResponse.);
+    if(!feeling.feeling)
+        return res.send(baseResponse.EMPTY_FEELING_RESULT);
 
     
     var feelingMusics = {};
+
+
     if(feeling.feeling === 1 || feeling.feeling === 2){
         feelingMusics = await musicProvider.retrieveFeelingMusic1();
         console.log(feelingMusics[0].musicName);
-        const YoutubeMusicApi = require('youtube-music-api');
-        const api = new YoutubeMusicApi();
-        api.initalize() // Retrieves Innertube Config
-        .then(info => {
-            api.search(feelingMusics[0].musicName, "video").then(result => console.log(result)) // just search for songs
-        });
+        console.log(feelingMusics[0].singer);
+
+        var YouTube = require('youtube-node');
+        var youTube = new YouTube();
+        var youTubeUrl = 'https://www.youtube.com/watch?v=';
+        youTube.setKey('AIzaSyBZp3ma4FykMG9vEjSmsm42fC8aOtUA0oQ');
+        var musicId = feelingMusics[0].musicId;
+
+        youTube.search(feelingMusics[0].musicName + " " + feelingMusics[0].singer + " MV", 2, {type: 'video', videoLicense:'youtube'},function(error, result) {
+        if (error) {
+            console.log(error);
+        }
+        else {
+            console.log(JSON.stringify(result, null, 2));
+            var resultjson = result.items[0];
+            console.log(resultjson.snippet.thumbnails.high.url);
+            console.log(resultjson.id.videoId);
+            if(resultjson.snippet.thumbnails.high.url){
+                var thumbnailsImage = resultjson.snippet.thumbnails.high.url;
+            } else {
+                var thumbnailsImage = "";
+            }
+            if(resultjson.id.videoId){
+                youTubeUrl += resultjson.id.videoId;
+            } else {
+                youTubeUrl = "";
+            }
+            
+            feelingMusics[0].youtubeUrl = youTubeUrl;
+            feelingMusics[0].imageUrl = thumbnailsImage;
+
+        }
+    
+    });
+    setTimeout(function() {
+        // Recommend 에 추천 
+        return res.send(response({ "isSuccess": true, "code": 1000, "message":"[익사이팅, 해피]기분별 음악 조회 성공" }, feelingMusics
+        ));
+      }, 3000);
+      
+
+        
     } else if(feeling.feeling === 3){
+
         feelingMusics = await musicProvider.retrieveFeelingMusic2();
+
+        console.log(feelingMusics[0].musicName);
+        console.log(feelingMusics[0].singer);
+
+        var YouTube = require('youtube-node');
+        var youTube = new YouTube();
+        var youTubeUrl = 'https://www.youtube.com/watch?v=';
+        youTube.setKey('AIzaSyBZp3ma4FykMG9vEjSmsm42fC8aOtUA0oQ');
+        var musicId = feelingMusics[0].musicId;
+
+        youTube.search(feelingMusics[0].musicName + " " + feelingMusics[0].singer + " MV", 2, {type: 'video', videoLicense:'youtube'},function(error, result) {
+        if (error) {
+            console.log(error);
+        }
+        else {
+            console.log(JSON.stringify(result, null, 2));
+            var resultjson = result.items[0];
+            console.log(resultjson.snippet.thumbnails.high.url);
+            console.log(resultjson.id.videoId);
+            if(resultjson.snippet.thumbnails.high.url){
+                var thumbnailsImage = resultjson.snippet.thumbnails.high.url;
+            } else {
+                var thumbnailsImage = "";
+            }
+            if(resultjson.id.videoId){
+                youTubeUrl += resultjson.id.videoId;
+            } else {
+                youTubeUrl = "";
+            }
+            
+            feelingMusics[0].youtubeUrl = youTubeUrl;
+            feelingMusics[0].imageUrl = thumbnailsImage;
+
+        }
+    
+    });
+    setTimeout(function() {
+        return res.send(response({ "isSuccess": true, "code": 1000, "message":"[쏘쏘]기분별 음악 조회 성공" }, feelingMusics
+        ));
+      }, 3000);
+      
     } else if(feeling.feeling === 4){
         const type = await musicProvider.retrieveSadType();
-        if(type === 1){
+        console.log(type);
+        if(type.sadType1 === 1){
             feelingMusics = await musicProvider.retrieveFeelingMusic3();
-        } else if(type === 2){
+
+            var YouTube = require('youtube-node');
+            var youTube = new YouTube();
+            var youTubeUrl = 'https://www.youtube.com/watch?v=';
+            youTube.setKey('AIzaSyBZp3ma4FykMG9vEjSmsm42fC8aOtUA0oQ');
+            var musicId = feelingMusics[0].musicId;
+    
+            youTube.search(feelingMusics[0].musicName + " " + feelingMusics[0].singer + " MV", 2, {type: 'video', videoLicense:'youtube'},function(error, result) {
+            if (error) {
+                console.log(error);
+            }
+            else {
+                console.log(JSON.stringify(result, null, 2));
+                var resultjson = result.items[0];
+                console.log(resultjson.snippet.thumbnails.high.url);
+                console.log(resultjson.id.videoId);
+                if(resultjson.snippet.thumbnails.high.url){
+                    var thumbnailsImage = resultjson.snippet.thumbnails.high.url;
+                } else {
+                    var thumbnailsImage = "";
+                }
+                if(resultjson.id.videoId){
+                    youTubeUrl += resultjson.id.videoId;
+                } else {
+                    youTubeUrl = "";
+                }
+                
+                feelingMusics[0].youtubeUrl = youTubeUrl;
+                feelingMusics[0].imageUrl = thumbnailsImage;
+    
+            }
+        
+        });
+        setTimeout(function() {
+            return res.send(response({ "isSuccess": true, "code": 1000, "message":"[새드1]기분별 음악 조회 성공" }, feelingMusics
+            ));
+          }, 3000);
+
+        } else if(type.sadType1 === 2){
             feelingMusics = await musicProvider.retrieveFeelingMusic4();
+
+            var YouTube = require('youtube-node');
+            var youTube = new YouTube();
+            var youTubeUrl = 'https://www.youtube.com/watch?v=';
+            youTube.setKey('AIzaSyBZp3ma4FykMG9vEjSmsm42fC8aOtUA0oQ');
+            var musicId = feelingMusics[0].musicId;
+    
+            youTube.search(feelingMusics[0].musicName + " " + feelingMusics[0].singer + " MV", 2, {type: 'video', videoLicense:'youtube'},function(error, result) {
+            if (error) {
+                console.log(error);
+            }
+            else {
+                console.log(JSON.stringify(result, null, 2));
+                var resultjson = result.items[0];
+                console.log(resultjson.snippet.thumbnails.high.url);
+                console.log(resultjson.id.videoId);
+                if(resultjson.snippet.thumbnails.high.url){
+                    var thumbnailsImage = resultjson.snippet.thumbnails.high.url;
+                } else {
+                    var thumbnailsImage = "";
+                }
+                if(resultjson.id.videoId){
+                    youTubeUrl += resultjson.id.videoId;
+                } else {
+                    youTubeUrl = "";
+                }
+                
+                feelingMusics[0].youtubeUrl = youTubeUrl;
+                feelingMusics[0].imageUrl = thumbnailsImage;
+    
+            }
+        
+        });
+        setTimeout(function() {
+            return res.send(response({ "isSuccess": true, "code": 1000, "message":"[새드2]기분별 음악 조회 성공" }, feelingMusics
+            ));
+          }, 3000);
         }
     } else if(feeling.feeling === 5){
         const type = await musicProvider.retrieveAngryType();
-        if(type === 1){
+        console.log(type);
+        if(type.angryType2 === 1){
+            console.log(">>>>");
             feelingMusics = await musicProvider.retrieveFeelingMusic5();
-        } else if(type === 2){
+            console.log(feelingMusics);
+            var YouTube = require('youtube-node');
+            var youTube = new YouTube();
+            var youTubeUrl = 'https://www.youtube.com/watch?v=';
+            youTube.setKey('AIzaSyBZp3ma4FykMG9vEjSmsm42fC8aOtUA0oQ');
+            var musicId = feelingMusics[0].musicId;
+    
+            youTube.search(feelingMusics[0].musicName + " " + feelingMusics[0].singer + " MV", 2, {type: 'video', videoLicense:'youtube'},function(error, result) {
+            if (error) {
+                console.log(error);
+            }
+            else {
+                console.log(JSON.stringify(result, null, 2));
+                var resultjson = result.items[0];
+                console.log(resultjson.snippet.thumbnails.high.url);
+                console.log(resultjson.id.videoId);
+                if(resultjson.snippet.thumbnails.high.url){
+                    var thumbnailsImage = resultjson.snippet.thumbnails.high.url;
+                } else {
+                    var thumbnailsImage = "";
+                }
+                if(resultjson.id.videoId){
+                    youTubeUrl += resultjson.id.videoId;
+                } else {
+                    youTubeUrl = "";
+                }
+                
+                feelingMusics[0].youtubeUrl = youTubeUrl;
+                feelingMusics[0].imageUrl = thumbnailsImage;
+    
+            }
+        
+        });
+        setTimeout(function() {
+
+            return res.send(response({ "isSuccess": true, "code": 1000, "message":"[앵그리1]기분별 음악 조회 성공" }, feelingMusics));
+          }, 3000);
+        
+        } else if(type.angryType2 === 2){
+            console.log("***");
             feelingMusics = await musicProvider.retrieveFeelingMusic3();
+            console.log(feelingMusics);
+            var YouTube = require('youtube-node');
+            var youTube = new YouTube();
+            var youTubeUrl = 'https://www.youtube.com/watch?v=';
+            youTube.setKey('AIzaSyBZp3ma4FykMG9vEjSmsm42fC8aOtUA0oQ');
+            var musicId = feelingMusics[0].musicId;
+    
+            youTube.search(feelingMusics[0].musicName + " " + feelingMusics[0].singer + " MV", 2, {type: 'video', videoLicense:'youtube'},function(error, result) {
+            if (error) {
+                console.log(error);
+            }
+            else {
+                console.log(JSON.stringify(result, null, 2));
+                var resultjson = result.items[0];
+                console.log(resultjson.snippet.thumbnails.high.url);
+                console.log(resultjson.id.videoId);
+                if(resultjson.snippet.thumbnails.high.url){
+                    var thumbnailsImage = resultjson.snippet.thumbnails.high.url;
+                } else {
+                    var thumbnailsImage = "";
+                }
+                if(resultjson.id.videoId){
+                    youTubeUrl += resultjson.id.videoId;
+                } else {
+                    youTubeUrl = "";
+                }
+                
+                feelingMusics[0].youtubeUrl = youTubeUrl;
+                feelingMusics[0].imageUrl = thumbnailsImage;
+    
+            }
+        
+        });
+        setTimeout(function() {
+            return res.send(response({ "isSuccess": true, "code": 1000, "message":"[앵그리2]기분별 음악 조회 성공" }, feelingMusics));
+          }, 3000);
+        
         }
     }
-
-    return res.send(response({ "isSuccess": true, "code": 1000, "message":"기분별 음악 조회 성공" }, feelingMusics));
-};
+}

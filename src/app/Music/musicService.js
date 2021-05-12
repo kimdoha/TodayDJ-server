@@ -193,3 +193,4 @@ exports.updateType = async function (type1, type2) {
         return errResponse(baseResponse.DB_ERROR);
     }
 };
+
