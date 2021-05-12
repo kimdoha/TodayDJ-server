@@ -200,6 +200,65 @@ async function retrieveFeelingMusic5(connection) {
   return feelingRow;
 }
 
+async function retrieveWeather(connection) {
+  const weatherquery = `
+      SELECT weather FROM Weather WHERE DATE(createAt) = CURRENT_DATE;
+      `;
+  const [weatherRow] = await connection.query(weatherquery);
+  return weatherRow;
+}
+
+async function retrieveWeatherMusic1(connection) {
+  const weatherquery = `
+    SELECT * FROM Music WHERE genre IN ('알앤비소울' ,'발라드', '재즈')
+    AND musicId NOT IN (SELECT DISTINCT musicId FROM Recommend)
+    ORDER BY RAND()
+    LIMIT 1;
+      `;
+  const [weatherRow] = await connection.query(weatherquery);
+  return weatherRow;
+}
+
+async function retrieveWeatherMusic2(connection) {
+  const weatherquery = `
+    SELECT * FROM Music WHERE genre IN ('일렉트로닉' ,'락메탈')
+    AND musicId NOT IN (SELECT DISTINCT musicId FROM Recommend)
+    ORDER BY RAND()
+    LIMIT 1;
+      `;
+  const [weatherRow] = await connection.query(weatherquery);
+  return weatherRow;
+}
+
+async function retrieveWeatherMusic3(connection) {
+  const weatherquery = `
+    SELECT * FROM Music WHERE genre IN ('인디' ,'포크어쿠스틱')
+    AND musicId NOT IN (SELECT DISTINCT musicId FROM Recommend)
+    ORDER BY RAND()
+    LIMIT 1;
+      `;
+  const [weatherRow] = await connection.query(weatherquery);
+  return weatherRow;
+}
+
+async function retrieveWeatherMusic4(connection) {
+  const weatherquery = `
+  SELECT * FROM Music WHERE genre IN ('아이돌','댄스팝','랩힙합','인디','포크어쿠스틱','알앤비소울')
+  AND musicId NOT IN (SELECT DISTINCT musicId FROM Recommend)
+  ORDER BY RAND()
+  LIMIT 1;
+      `;
+  const [weatherRow] = await connection.query(weatherquery);
+  return weatherRow;
+}
+
+async function existRecommend(connection) {
+  const existQuery = `
+  SELECT EXISTS(SELECT * FROM Recommend WHERE DATE(createAt) = CURRENT_DATE) AS exist;
+    `;
+  const [existRows] = await connection.query(existQuery);
+  return existRows;
+}
 
 // 유저 생성
 async function insertUserInfo(connection, insertUserInfoParams) {
@@ -232,5 +291,11 @@ module.exports = {
   retrieveFeelingMusics4,
   retrieveSadType,
   retrieveAngryType,
-  retrieveFeelingMusic5
+  retrieveFeelingMusic5,
+  retrieveWeather,
+  retrieveWeatherMusic1,
+  retrieveWeatherMusic2,
+  retrieveWeatherMusic3,
+  retrieveWeatherMusic4,
+  existRecommend
 };

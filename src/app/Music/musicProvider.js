@@ -154,3 +154,76 @@ exports.retrieveFeelingMusic5 = async function () {
   return feelingResult;
 }
 
+
+exports.retrieveWeather = async function () {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const [weatherResult] = await musicDao.retrieveWeather(connection);
+
+  connection.release();
+
+  return weatherResult;
+}
+
+// 날씨 추천 노래
+exports.retrieveWeatherMusic1 = async function () {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const [weatherResult] = await musicDao.retrieveWeatherMusic1 (connection);
+
+  connection.release();
+
+  return weatherResult;
+}
+
+exports.retrieveWeatherMusic2 = async function () {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const [weatherResult] = await musicDao.retrieveWeatherMusic2 (connection);
+
+  connection.release();
+
+  return weatherResult;
+}
+
+exports.retrieveWeatherMusic3 = async function () {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const [weatherResult] = await musicDao.retrieveWeatherMusic3(connection);
+
+  connection.release();
+
+  return weatherResult;
+}
+
+exports.retrieveWeatherMusic4 = async function () {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const [weatherResult] = await musicDao.retrieveWeatherMusic4(connection);
+
+  connection.release();
+
+  return weatherResult;
+}
+
+exports.existRecommend = async function () {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const [weatherResult] = await musicDao.existRecommend(connection);
+
+  connection.release();
+
+  return weatherResult;
+}
+
+// exports.retrieveWeatherMusic6 = async function () {
+//   const connection = await pool.getConnection(async (conn) => conn);
+//   const [weatherResult] = await musicDao.retrieveWeatherMusic6 (connection);
+
+//   connection.release();
+
+//   return weatherResult;
+// }
+
+// exports.retrieveWeatherMusic7 = async function () {
+//   const connection = await pool.getConnection(async (conn) => conn);
+//   const [weatherResult] = await musicDao.retrieveWeatherMusic7 (connection);
+
+//   connection.release();
+
+//   return weatherResult;
+// }

@@ -23,6 +23,9 @@ module.exports = function(app){
     // 3. 입력한 기분을 바탕으로 추천 음악 조회
     app.get('/feeling/music',music.feelingMusics);
 
+    // 4. 날씨 정보를 바탕으로 추천 음악 조회
+    app.get('/weather/music',music.weatherMusics);
+
     // 9. 플레이리스트 폴더 생성 및 삭제
     app.route('/playlist').post(music.setFolder);
 

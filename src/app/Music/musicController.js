@@ -94,7 +94,7 @@ exports.getWeather = async function (req, res) {
             }
             else{
                 console.log(currentWeather);
-                weatherName = currentWeather.weather[0].main;
+                weatherName = currentWeather.weather[0].description;
                 area = currentWeather.name;
                 weather = async function (req, res) {
                     const [checkStatus] = await musicProvider.existWeather();
@@ -186,7 +186,7 @@ exports.setFolder = async function (req, res) {
 
 
     if(!feelNum)
-        return res.send(response(baseResponse.FEELING_EMPTY ));
+        return res.send(response(baseResponse.FEELING_EMPTY));
 
     // 숫자 형식 체크
     var regExp = /^[0-9]+$/;
@@ -221,14 +221,113 @@ exports.setFolder = async function (req, res) {
 exports.weatherMusics = async function (req, res) {
 
     const weather = await musicProvider.retrieveWeather();
-    if(weather == ' '){
-        const weatherMusics = await musicProvider.retrieveWeatherMusic();
+    if(!weather)
+        return res.send(response(baseResponse.EMPTY_WEATHER_RESULT));
+
+    console.log(weather);
+    var thunderstormWeather1 = ['thunderstorm with light rain', 'thunderstorm with rain', 'light thunderstorm'];
+    var thunderstormWeather2 = [ 'thunderstorm with heavy rain','thunderstorm','heavy thunderstorm', 'ragged thunderstorm', 'thunderstorm with light drizzle', 'thunderstorm with drizzle', 'thunderstorm with heavy drizzle'];
+   
+    var drizzleWeather1 = ['light intensity drizzle', 'drizzle', 'light intensity drizzle rain','drizzle rain'];
+    var drizzleWeather2 = [ 'heavy intensity drizzle','heavy intensity drizzle rain','shower rain and drizzle', 'heavy shower rain and drizzle', 'shower drizzle'];
+  
+    var rainWeather1 = ['light rain', 'moderate rain', 'light intensity drizzle rain','light intensity shower rain'];
+    var rainWeather2 = [ 'heavy intensity rain','very heavy rain','extreme rain', 'freezing rain', 'shower drizzle', 'shower rain', 'heavy intensity shower rain', 'ragged shower rain'];
+   
+    var snowWeather1 = ['light snow', 'Snow', 'Sleet', 'Light shower sleet', 'Light rain and snow', 'Light shower snow'];
+    var snowWeather2 = [ 'Heavy snow', 'Shower sleet', 'Rain and snow', 'shower drizzle', 'Shower snow', 'Heavy shower snow'];
+       
+    var atmosphereWeather1 = ['mist', 'Smoke', 'Haze', 'Light', 'sand/ dust whirls', 'fog', 'sand', 'dust'];
+    var atmosphereWeather2 = [ 'volcanic ash', 'squalls', 'tornado'];
+    
+    var clearWeather = ['clear sky'];
+
+    var cloudsWeather1 = ['few clouds: 11-25%', 'scattered clouds: 25-50%'];
+    var cloudsWeather2 = [ 'broken clouds: 51-84%', 'overcast clouds: 85-100%'];
+
+    var weatherMusics = {};
+
+    if(thunderstormWeather1.includes(weather.weather)){
+        weatherMusics = await musicProvider.retrieveWeatherMusic1();
+        
+    } else if (thunderstormWeather2.includes(weather.weather)){
+        weatherMusics = await musicProvider.retrieveWeatherMusic2();
+    } else if (drizzleWeather1.includes(weather.weather)){
+        weatherMusics = await musicProvider.retrieveWeatherMusic3();
+    } else if (drizzleWeather2.includes(weather.weather)){
+        weatherMusics = await musicProvider.retrieveWeatherMusic1();
+    } else if (rainWeather1.includes(weather.weather)){
+        weatherMusics = await musicProvider.retrieveWeatherMusic1();
+    } else if (rainWeather2.includes(weather.weather)){
+        weatherMusics = await musicProvider.retrieveWeatherMusic2();
+    } else if (snowWeather1.includes(weather.weather)){
+        weatherMusics = await musicProvider.retrieveWeatherMusic3();
+    } else if (snowWeather2.includes(weather.weather)){
+        weatherMusics = await musicProvider.retrieveWeatherMusic1();
+    } else if (atmosphereWeather1.includes(weather.weather)){
+        weatherMusics = await musicProvider.retrieveWeatherMusic3();
+    } else if (atmosphereWeather2.includes(weather.weather)){
+        weatherMusics = await musicProvider.retrieveWeatherMusic2();
+    } else if (clearWeather.includes(weather.weather)){
+        weatherMusics = await musicProvider.retrieveWeatherMusic4();
+    
+    } else if (cloudsWeather1.includes(weather.weather)){
+        weatherMusics = await musicProvider.retrieveWeatherMusic3();
+    } else if (cloudsWeather2.includes(weather.weather)){
+        weatherMusics = await musicProvider.retrieveWeatherMusic1();
+    } else {
+        return res.send(response(baseResponse.EMPTY_WEATHER_RESULT));
     }
-    if(weather == ' '){
-        const weatherMusics = await musicProvider.retrieveWeatherMusic();
+    var YouTube = require('youtube-node');
+    var youTube = new YouTube();
+    var youTubeUrl = 'https://www.youtube.com/watch?v=';
+    youTube.setKey('AIzaSyBZp3ma4FykMG9vEjSmsm42fC8aOtUA0oQ');
+
+    
+    youTube.search(weatherMusics.musicName + " " + weatherMusics.singer + " MV", 2, {type: 'video', videoLicense:'youtube'},function(error, result) {
+    if (error) {
+        console.log(error);
+    }
+    else {
+        console.log(JSON.stringify(result, null, 2));
+        var resultjson = result.items[0];
+        // console.log(resultjson.snippet.thumbnails.high.url);
+        // console.log(resultjson.id.videoId);
+        if(resultjson.snippet.thumbnails.high.url){
+            var thumbnailsImage = resultjson.snippet.thumbnails.high.url;
+        } else {
+            var thumbnailsImage = "";
+        }
+        if(resultjson.id.videoId){
+            youTubeUrl += resultjson.id.videoId;
+        } else {
+            youTubeUrl = "";
+        }
+        
+        weatherMusics.youtubeUrl = youTubeUrl;
+        weatherMusics.imageUrl = thumbnailsImage;
+
     }
 
-    return res.send(response({ "isSuccess": true, "code": 1000, "message":"날씨별 음악 조회 성공" }, weatherMusics));
+    });
+    setTimeout(function() {
+        // Recommend 에 추천 
+        var type = 0;
+        console.log(type, weather.weather, weatherMusics.musicId);
+
+        const [checkRecommend] = await musicProvider.existRecommend();
+        console.log(checkRecommend);
+        
+        // 오늘의 Recommend에 저장된게 없으면 -------수정
+        if (checkRecommend.exist == 0) {
+            const addRecommend = await musicService.setRecommend();
+        } else {
+            const updateRecommend = await musicService.setRecommend();
+        }
+
+        return res.send(response({ "isSuccess": true, "code": 1000, "message": "날씨별 음악 조회 성공" }, weatherMusics
+        ));
+    }, 3000);
 };
 
 
@@ -539,3 +638,4 @@ exports.feelingMusics = async function (req, res) {
         }
     }
 }
+
