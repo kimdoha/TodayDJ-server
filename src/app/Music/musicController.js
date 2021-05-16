@@ -224,7 +224,7 @@ exports.weatherMusics = async function (req, res) {
     if(!weather)
         return res.send(response(baseResponse.EMPTY_WEATHER_RESULT));
 
-    console.log(weather);
+    
     var thunderstormWeather1 = ['thunderstorm with light rain', 'thunderstorm with rain', 'light thunderstorm'];
     var thunderstormWeather2 = [ 'thunderstorm with heavy rain','thunderstorm','heavy thunderstorm', 'ragged thunderstorm', 'thunderstorm with light drizzle', 'thunderstorm with drizzle', 'thunderstorm with heavy drizzle'];
    
@@ -242,8 +242,8 @@ exports.weatherMusics = async function (req, res) {
     
     var clearWeather = ['clear sky'];
 
-    var cloudsWeather1 = ['few clouds: 11-25%', 'scattered clouds: 25-50%'];
-    var cloudsWeather2 = [ 'broken clouds: 51-84%', 'overcast clouds: 85-100%'];
+    var cloudsWeather1 = ['few clouds', 'scattered clouds'];
+    var cloudsWeather2 = [ 'broken clouds', 'overcast clouds'];
 
     var weatherMusics = {};
 
@@ -307,27 +307,38 @@ exports.weatherMusics = async function (req, res) {
         weatherMusics.youtubeUrl = youTubeUrl;
         weatherMusics.imageUrl = thumbnailsImage;
 
-    }
-
-    });
-    setTimeout(function() {
-        // Recommend 에 추천 
-        var type = 0;
-        console.log(type, weather.weather, weatherMusics.musicId);
-
-        const [checkRecommend] = await musicProvider.existRecommend();
-        console.log(checkRecommend);
-        
-        // 오늘의 Recommend에 저장된게 없으면 -------수정
-        if (checkRecommend.exist == 0) {
-            const addRecommend = await musicService.setRecommend();
-        } else {
-            const updateRecommend = await musicService.setRecommend();
         }
-
-        return res.send(response({ "isSuccess": true, "code": 1000, "message": "날씨별 음악 조회 성공" }, weatherMusics
-        ));
+    });
+ 
+    setTimeout(function(){
+        // Recommend 에 추천 
+        //resolve(weatherMusics);
+        return res.send(response({ "isSuccess": true, "code": 1000, "message": "날씨별 음악 조회 성공" }, weatherMusics ));
+    
     }, 3000);
+
+	// const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+    // async function something() {
+    //     await delay(5000);
+    //     var type = 0;
+    //     var weath = weather.weather;
+    //     var musicId = weatherMusics.musicId;
+    
+    //     const [checkRecommend] = await musicProvider.existRecommend();
+    //     console.log(checkRecommend);
+        
+    //     // 오늘의 Recommend에 저장된게 없으면 -------수정
+    //     if (checkRecommend.exist == 0) {
+    //         const addRecommend = await musicService.setRecommend(type, weath, musicId);
+    //     } else {
+    //         const updateRecommend = await musicService.updateRecommend(type, weath, musicId);
+    //     }
+    //     console.log("done!");
+    //     return res.send(response({ "isSuccess": true, "code": 1000, "message": "날씨별 음악 조회 성공" }, weatherMusics ));
+    // }
+
+    // something();
 };
 
 
@@ -547,8 +558,7 @@ exports.feelingMusics = async function (req, res) {
         
         });
         setTimeout(function() {
-            return res.send(response({ "isSuccess": true, "code": 1000, "message":"[새드2]기분별 음악 조회 성공" }, feelingMusics
-            ));
+            return res.send(response({ "isSuccess": true, "code": 1000, "message":"[새드2]기분별 음악 조회 성공" }, feelingMusics));
           }, 3000);
         }
     } else if(feeling.feeling === 5){
@@ -639,3 +649,24 @@ exports.feelingMusics = async function (req, res) {
     }
 }
 
+//   exports.getOct = async function (req, res) {
+
+//     const tesseract = require("node-tesseract-ocr")
+
+//     const config = {
+//       lang: "eng",
+//       oem: 1,
+//       psm: 3,
+//     }
+//     //const img = "https://tesseract.projectnaptha.com/img/eng_bw.png"
+//     const img = "https://dnvefa72aowie.cloudfront.net/origin/article/202012/3c3d09f01042a76307f13f0809e174327833fb8e30ca4ddbf1679686e1380bc4.webp?q=95&s=1440x1440&t=inside"
+//     tesseract
+//       .recognize(img, config)
+//       .then((text) => {
+//         console.log(text)
+//       })
+//       .catch((error) => {
+//         console.log(error.message)
+//       })
+//     return res.send(response(baseResponse.SUCCESS));
+// };

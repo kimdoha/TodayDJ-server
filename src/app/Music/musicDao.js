@@ -52,6 +52,7 @@ async function existWeather(connection) {
   const [existRows] = await connection.query(existQuery);
   return existRows;
 }
+
 // 날씨 설정
 async function setWeather(connection, weatherName, area) {
   const addWeatherquery = `
@@ -254,10 +255,27 @@ async function retrieveWeatherMusic4(connection) {
 
 async function existRecommend(connection) {
   const existQuery = `
-  SELECT EXISTS(SELECT * FROM Recommend WHERE DATE(createAt) = CURRENT_DATE) AS exist;
+  SELECT EXISTS(SELECT * FROM Recommend WHERE DATE(createAt) = CURRENT_DATE AND type = 0) AS exist;
     `;
   const [existRows] = await connection.query(existQuery);
   return existRows;
+}
+
+// 추천
+async function setRecommend(connection, type, weath, musicId) {
+  const recommendQuery = `
+  INSERT INTO Recommend(musicId, type, weather) VALUES(?, ?, ?);
+    `;
+  const [setRows] = await connection.query(recommendQuery, [musicId,type, weath]);
+  return setRows;
+}
+
+async function updateRecommend(connection, type, weath, musicId) {
+  const recommendQuery = `
+  UPDATE Recommend SET musicId = ?, type = ? , weather = ? WHERE DATE(createAt) = CURRENT_DATE();
+    `;
+  const [setRows] = await connection.query(recommendQuery, [musicId, type, weath]);
+  return setRows;
 }
 
 // 유저 생성
@@ -297,5 +315,7 @@ module.exports = {
   retrieveWeatherMusic2,
   retrieveWeatherMusic3,
   retrieveWeatherMusic4,
-  existRecommend
+  existRecommend,
+  setRecommend,
+  updateRecommend
 };

@@ -32,4 +32,6 @@ module.exports = function(app){
     // 11. 개인 정보 설정 저장
     app.route('/user/:type1/:type2').post(music.setUser);
 
+    // 12.
+    //app.get('/oct',music.getOct);
 };
