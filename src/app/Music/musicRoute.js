@@ -17,9 +17,6 @@ module.exports = function(app){
     // 4. 입력한 기분 저장
     app.route('/feeling/:num').post(music.setFeeling);
     
-    // 5. 날씨 정보를 바탕으로 추천 음악 조회
-    //app.get('/weather/music',music.weatherMusics); 
-    
     // 3. 입력한 기분을 바탕으로 추천 음악 조회
     app.get('/feeling/music',music.feelingMusics);
 
