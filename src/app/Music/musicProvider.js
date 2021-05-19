@@ -201,6 +201,7 @@ exports.retrieveWeatherMusic4 = async function () {
   return weatherResult;
 }
 
+// 날씨에 따른 노래 추천 조회
 exports.retrieveYoutubeUrl = async function (weatherMusics) {
   const connection = await pool.getConnection(async (conn) => conn);
 
@@ -256,6 +257,71 @@ exports.settingRecommend = async function (type, weath, weatherMusics) {
       const addRecommend = await musicService.setRecommend(type, weath, musicId);
   } else {
       const updateRecommend = await musicService.updateRecommend(type, weath, musicId);
+  }
+  console.log("done!");
+
+  connection.release();
+
+  return;
+}
+
+// 기분에 따른 노래 추천 조회
+exports.retrieveYoutubeUrl2 = async function (feelingMusics) {
+  const connection = await pool.getConnection(async (conn) => conn);
+
+  var YouTube = require('youtube-node');
+  var youTube = new YouTube();
+  var youTubeUrl = 'https://www.youtube.com/watch?v=';
+  youTube.setKey('AIzaSyBZp3ma4FykMG9vEjSmsm42fC8aOtUA0oQ');
+  var musicId = feelingMusics[0].musicId;
+
+  youTube.search(feelingMusics[0].musicName + " " + feelingMusics[0].singer + " MV", 2, {type: 'video', videoLicense:'youtube'},function(error, result) {
+  if (error) {
+      console.log(error);
+  }
+  else {
+      console.log(JSON.stringify(result, null, 2));
+      var resultjson = result.items[0];
+      console.log(resultjson.snippet.thumbnails.high.url);
+      console.log(resultjson.id.videoId);
+      if(resultjson.snippet.thumbnails.high.url){
+          var thumbnailsImage = resultjson.snippet.thumbnails.high.url;
+      } else {
+          var thumbnailsImage = "";
+      }
+      if(resultjson.id.videoId){
+          youTubeUrl += resultjson.id.videoId;
+      } else {
+          youTubeUrl = "";
+      }
+      
+      feelingMusics[0].youtubeUrl = youTubeUrl;
+      feelingMusics[0].imageUrl = thumbnailsImage;
+
+  }
+});
+    setTimeout(function(){
+       //console.log(weatherMusics);
+       connection.release();
+       return feelingMusics;
+    
+    }, 3000);
+}
+
+exports.settingRecommend2 = async function (type, feel, feelingMusics) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  
+  var musicId = feelingMusics[0].musicId;
+  console.log(type, feel, musicId);
+
+  const [checkRecommend] = await musicDao.existRecommend2(connection);
+  console.log(checkRecommend);
+
+  // 오늘의 Recommend에 저장된게 없으면 -------수정
+  if (checkRecommend.exist == 0) {
+      const addRecommend = await musicService.setRecommend2(type, feel, musicId);
+  } else {
+      const updateRecommend = await musicService.updateRecommend2(type, feel, musicId);
   }
   console.log("done!");
 

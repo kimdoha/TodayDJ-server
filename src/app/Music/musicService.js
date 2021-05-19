@@ -226,3 +226,35 @@ exports.updateRecommend = async function (type, weath, musicId){
     }
 };
 
+exports.setRecommend2 = async function (type, feel, musicId){
+    try {
+
+        const connection = await pool.getConnection(async (conn) => conn);
+        console.log("before");
+        const recommendResult = await musicDao.setRecommend2(connection, type, feel, musicId);
+        console.log(`추가된 회원 : ${recommendResult.insertId}`)
+        connection.release();
+        return;
+
+    } catch (err) {
+        logger.error(`App - SetRecommend2 Service error\n: ${err.message}`);
+        return errResponse(baseResponse.DB_ERROR);
+    }
+};
+
+exports.updateRecommend2 = async function (type, feel, musicId){
+    try {
+
+        const connection = await pool.getConnection(async (conn) => conn);
+        console.log("before");
+        const recommendResult = await musicDao.updateRecommend2(connection, type, feel, musicId);
+        console.log(`추가된 회원 : ${recommendResult.insertId}`)
+        connection.release();
+        return;
+
+    } catch (err) {
+        logger.error(`App - UpdateRecommend2 Service error\n: ${err.message}`);
+        return errResponse(baseResponse.DB_ERROR);
+    }
+};
+
