@@ -277,155 +277,17 @@ exports.weatherMusics = async function (req, res) {
     } else {
         return res.send(response(baseResponse.EMPTY_WEATHER_RESULT));
     }
-    var YouTube = require('youtube-node');
-    var youTube = new YouTube();
-    var youTubeUrl = 'https://www.youtube.com/watch?v=';
-    youTube.setKey('AIzaSyBZp3ma4FykMG9vEjSmsm42fC8aOtUA0oQ');
 
-    youTube.search(weatherMusics.musicName + " " + weatherMusics.singer + " MV", 2, {type: 'video', videoLicense:'youtube'},function(error, result) {
-        if (error) {
-            console.log(error);
-        }
-        else {
-            //console.log(JSON.stringify(result, null, 2));
-            var resultjson = result.items[0];
-            // console.log(resultjson.snippet.thumbnails.high.url);
-            // console.log(resultjson.id.videoId);
-            if(resultjson.snippet.thumbnails.high.url){
-                var thumbnailsImage = resultjson.snippet.thumbnails.high.url;
-            } else {
-                var thumbnailsImage = "";
-            }
-            if(resultjson.id.videoId){
-                youTubeUrl += resultjson.id.videoId;
-            } else {
-                youTubeUrl = "";
-            }
-            
-            weatherMusics.youtubeUrl = youTubeUrl;
-            weatherMusics.imageUrl = thumbnailsImage;
-    
-            }
-        });
-        // 실행되는 코드
-        // setTimeout(function(){
-        //     // Recommend 에 추천 
-        //     //resolve(weatherMusics);
-        //     return res.send(response({ "isSuccess": true, "code": 1000, "message": "날씨별 음악 조회 성공" }, weatherMusics ));
-        
-        // }, 3000);
-
-        // *********************************
-
-        // var type = 0;
-        // var weath = weather.weather;
-        // var musicId = weatherMusics.musicId;
-    
-        // const [checkRecommend] = await musicProvider.existRecommend();
-        // console.log(checkRecommend);
-        
-        // // 오늘의 Recommend에 저장된게 없으면 -------수정
-        // if (checkRecommend.exist == 0) {
-        //     const addRecommend = await musicService.setRecommend(type, weath, musicId);
-        // } else {
-        //     const updateRecommend = await musicService.updateRecommend(type, weath, musicId);
-        // }
-        // console.log("done!");
-     //   return res.send(response({ "isSuccess": true, "code": 1000, "message": "날씨별 음악 조회 성공" }, weatherMusics ));
-
-    // *************************
-    // async function fooPromise(weatherMusics) {
-    //     return new Promise((resolve, reject) => {
-
-    //         setTimeout(function(){
-    //             // Recommend 에 추천 
-                
-    //             //return res.send(response({ "isSuccess": true, "code": 1000, "message": "날씨별 음악 조회 성공" }, weatherMusics ));
-    //             resolve(weatherMusics);
-    //         }, 3000);
-    //     })
-    // }
-
-    // fooPromise(weatherMusics);
-
-    // *************************
-
-    var promise = new Promise(function (resolve, reject) {
-        setTimeout(function () {
-            return res.send({ "isSuccess": true, "code": 1000, "message": "날씨별 음악 조회 성공" , "result": { weatherMusics }});
-        }, 3000)
-    });
-
-    // var type = 0;
-    // var weath = weather.weather;
-    // var musicId = weatherMusics.musicId;
-    
-    // const [checkRecommend] = await musicProvider.existRecommend();
-    // console.log(checkRecommend);
-        
-    // // 오늘의 Recommend에 저장된게 없으면 -------수정
-    // if (checkRecommend.exist == 0) {
-    //     const addRecommend = await musicService.setRecommend(type, weath, musicId);
-    // } else {
-    //     const updateRecommend = await musicService.updateRecommend(type, weath, musicId);
-    // }
-    // console.log("done!");
-    //return res.send(responsed);
-    
-    // promise.then(()=>{
-    //     return res.send({ "isSuccess": true, "code": 1000, "message": "날씨별 음악 조회 성공" , "result": { weatherMusics }});
-    // });
-
-
+    await musicProvider.retrieveYoutubeUrl(weatherMusics);
+    var type = 0;
+    var weath = weather.weather;
+    await musicProvider.settingRecommend(type, weath, weatherMusics);
     
 
-    //   promise.then(function () {
-
-    //     async function recommend(weatherMusics){
-    //         console.log(weatherMusics);
-
-    //         var type = 0;
-    //         var weath = weather.weather;
-    //         //console.log(weatherMusics);
-    //         var musicId = weatherMusics.musicId;
-
-    //         const [checkRecommend] = await musicProvider.existRecommend();
-    //         console.log(checkRecommend);
-            
-    //         // 오늘의 Recommend에 저장된게 없으면 -------수정
-    //         if (checkRecommend.exist == 0) {
-    //             const addRecommend = await musicService.setRecommend(type, weath, musicId);
-    //         } else {
-    //             const updateRecommend = await musicService.updateRecommend(type, weath, musicId);
-    //         }
-    //     };
-    //     recommend(weatherMusics);
-
-    //     return res.send(response({ "isSuccess": true, "code": 1000, "message": "날씨별 음악 조회 성공" }, weatherMusics ));
-    //   });
-
-	// const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
-
-    // async function something() {
-    //     await delay(5000);
-    //     var type = 0;
-    //     var weath = weather.weather;
-    //     var musicId = weatherMusics.musicId;
-    
-    //     const [checkRecommend] = await musicProvider.existRecommend();
-    //     console.log(checkRecommend);
-        
-    //     // 오늘의 Recommend에 저장된게 없으면 -------수정
-    //     if (checkRecommend.exist == 0) {
-    //         const addRecommend = await musicService.setRecommend(type, weath, musicId);
-    //     } else {
-    //         const updateRecommend = await musicService.updateRecommend(type, weath, musicId);
-    //     }
-    //     console.log("done!");
-    //     return res.send(response({ "isSuccess": true, "code": 1000, "message": "날씨별 음악 조회 성공" }, weatherMusics ));
-    // }
-
-    // something();
+    setTimeout(function(){
+        return res.send(response({ "isSuccess": true, "code": 1000, "message": "날씨별 음악 조회 성공" }, weatherMusics ));
+    }, 5000);
+   
 };
 
 
@@ -735,25 +597,3 @@ exports.feelingMusics = async function (req, res) {
         }
     }
 }
-
-//   exports.getOct = async function (req, res) {
-
-//     const tesseract = require("node-tesseract-ocr")
-
-//     const config = {
-//       lang: "eng",
-//       oem: 1,
-//       psm: 3,
-//     }
-//     const img = "https://tesseract.projectnaptha.com/img/eng_bw.png"
-//     //const img = "https://dnvefa72aowie.cloudfront.net/origin/article/202012/3c3d09f01042a76307f13f0809e174327833fb8e30ca4ddbf1679686e1380bc4.webp?q=95&s=1440x1440&t=inside"
-//     tesseract
-//       .recognize(img, config)
-//       .then((text) => {
-//         console.log(text)
-//       })
-//       .catch((error) => {
-//         console.log(error.message)
-//       })
-//     return res.send(response(baseResponse.SUCCESS));
-// };

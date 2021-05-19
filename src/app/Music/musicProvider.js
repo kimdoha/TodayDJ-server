@@ -1,6 +1,6 @@
 const { pool } = require("../../../config/database");
 const { logger } = require("../../../config/winston");
-
+const musicService = require("./musicService");
 const musicDao = require("./musicDao");
 
 // Provider: Read 비즈니스 로직 처리
@@ -201,29 +201,65 @@ exports.retrieveWeatherMusic4 = async function () {
   return weatherResult;
 }
 
-exports.existRecommend = async function () {
+exports.retrieveYoutubeUrl = async function (weatherMusics) {
   const connection = await pool.getConnection(async (conn) => conn);
-  const [weatherResult] = await musicDao.existRecommend(connection);
+
+  var YouTube = require('youtube-node');
+  var youTube = new YouTube();
+  var youTubeUrl = 'https://www.youtube.com/watch?v=';
+  youTube.setKey('AIzaSyBZp3ma4FykMG9vEjSmsm42fC8aOtUA0oQ');
+
+  youTube.search(weatherMusics.musicName + " " + weatherMusics.singer + " MV", 2, {type: 'video', videoLicense:'youtube'},function(error, result) {
+    if (error) {
+        console.log(error);
+    }
+    else {
+        //console.log(JSON.stringify(result, null, 2));
+        //console.log(result);
+        var resultjson = result.items[0];
+        console.log(resultjson.snippet.thumbnails.high.url);
+        console.log(resultjson.id.videoId);
+        if(resultjson.snippet.thumbnails.high.url){
+            var thumbnailsImage = resultjson.snippet.thumbnails.high.url;
+        } else {
+            var thumbnailsImage = "";
+        }
+        if(resultjson.id.videoId){
+            youTubeUrl += resultjson.id.videoId;
+        } else {
+            youTubeUrl = "";
+        }
+        
+        weatherMusics.youtubeUrl = youTubeUrl;
+        weatherMusics.imageUrl = thumbnailsImage;
+        }
+    });
+    setTimeout(function(){
+       //console.log(weatherMusics);
+       connection.release();
+       return weatherMusics;
+    
+    }, 3000);
+}
+
+exports.settingRecommend = async function (type, weath, weatherMusics) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  
+  var musicId = weatherMusics.musicId;
+  console.log(type, weath, musicId);
+
+  const [checkRecommend] = await musicDao.existRecommend(connection);
+  console.log(checkRecommend);
+
+  // 오늘의 Recommend에 저장된게 없으면 -------수정
+  if (checkRecommend.exist == 0) {
+      const addRecommend = await musicService.setRecommend(type, weath, musicId);
+  } else {
+      const updateRecommend = await musicService.updateRecommend(type, weath, musicId);
+  }
+  console.log("done!");
 
   connection.release();
 
-  return weatherResult;
+  return;
 }
-
-// exports.retrieveWeatherMusic6 = async function () {
-//   const connection = await pool.getConnection(async (conn) => conn);
-//   const [weatherResult] = await musicDao.retrieveWeatherMusic6 (connection);
-
-//   connection.release();
-
-//   return weatherResult;
-// }
-
-// exports.retrieveWeatherMusic7 = async function () {
-//   const connection = await pool.getConnection(async (conn) => conn);
-//   const [weatherResult] = await musicDao.retrieveWeatherMusic7 (connection);
-
-//   connection.release();
-
-//   return weatherResult;
-// }

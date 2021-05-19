@@ -225,3 +225,4 @@ exports.updateRecommend = async function (type, weath, musicId){
         return errResponse(baseResponse.DB_ERROR);
     }
 };
+
