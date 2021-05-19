@@ -440,3 +440,38 @@ exports.feelingMusics = async function (req, res) {
         }
     }
 }
+
+exports.getMusicList = async function (req, res) {
+
+    const musicList1 = await musicProvider.retrieveMusicList1();
+    const musicList2 = await musicProvider.retrieveMusicList2();
+    console.log(musicList1, musicList2);
+    if(musicList1.length < 1 || musicList2.length < 1)
+        return res.send(baseResponse.EMPTY_WEATHERFEELING_RESULT);
+
+    let totalData = [];
+    totalData[0] = musicList1;
+    totalData[1] = musicList2;
+    return res.send(response({ "isSuccess": true, "code": 1000, "message": "날씨 + 기분 음악 조회 성공" }, totalData ));
+};
+
+
+exports.getChart= async function (req, res) {
+
+    const month = req.params.month;
+    if (!month) return res.send(errResponse(baseResponse.NUM_MONTH));
+
+    const chart = await musicProvider.retrieveGetChart(month);
+
+
+    return res.send(response({ "isSuccess": true, "code": 1000, "message": "월별 기분별 통계 성공" }, chart ));
+};
+
+
+exports.getTotalChart = async function (req, res) {
+
+    const chart = await musicProvider.retrieveTotalGetChart();
+
+
+    return res.send(response({ "isSuccess": true, "code": 1000, "message": "전체 기분별 통계 성공" }, chart ));
+};

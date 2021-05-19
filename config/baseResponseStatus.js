@@ -46,6 +46,8 @@ module.exports = {
     TYPE_EMPTY : { "isSuccess": false, "code": 2025, "message": "타입을 입력해주세요" },
     TYPE_RANGE : { "isSuccess": false, "code": 2026, "message": "타입 범위를 벗어났습니다" },
     
+    // month
+    NUM_MONTH: { "isSuccess": false, "code": 2027, "message": "월을 입력해주세요" },
     
     // Response error
     SIGNUP_REDUNDANT_EMAIL : { "isSuccess": false, "code": 3001, "message":"중복된 이메일입니다." },
@@ -64,6 +66,8 @@ module.exports = {
     // weather
     EMPTY_WEATHER_RESULT : { "isSuccess": false, "code": 3009, "message": "날씨를 입력해주세요" },
     
+    // 날씨 + 기분별
+    EMPTY_WEATHERFEELING_RESULT : { "isSuccess": false, "code": 3010, "message": "추천 받은 노래가 없습니다" },
     //Connection, Transaction 등의 서버 오류
     DB_ERROR : { "isSuccess": false, "code": 4000, "message": "데이터 베이스 에러"},
     SERVER_ERROR : { "isSuccess": false, "code": 4001, "message": "서버 에러"},

@@ -5,11 +5,14 @@ module.exports = function(app){
     // 1. 날씨 조회 (회원가입) API
     app.get('/weather',music.getWeather); 
 
-    // 2. 유저 조회 API (+ 검색)
-    //app.get('/app/users',music.getUsers); 
+    // 2. 날씨별 + 기분별 음악 정보 조회 [캘린더 팝업 화면]
+    app.get('/music',music.getMusicList); 
 
-    // 3. 특정 유저 조회 API
-    //app.get('/app/users/:userId', music.getUserById);
+    // 9. 월별 기분별 통계
+    app.get('/feeling/chart/:month', music.getChart);
+
+    // 11. 전체 기분별 통계
+    app.get('/feeling/totalchart', music.getTotalChart);
 
     // jwt를 사용하기 위해 jwtMiddleware 를 체이닝 방식으로 추가하는 예제
     // app.get('/app/users/:userId', jwtMiddleware, user.getUserById);

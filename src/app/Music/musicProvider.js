@@ -329,3 +329,29 @@ exports.settingRecommend2 = async function (type, feel, feelingMusics) {
 
   return;
 }
+// 날씨 + 음악별 노래 조회 
+exports.retrieveMusicList1 = async function () {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const [musicResult] = await musicDao.retrieveMusicList1(connection);
+
+  connection.release();
+
+  return musicResult;
+}
+exports.retrieveMusicList2 = async function () {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const [musicResult] = await musicDao.retrieveMusicList2(connection);
+
+  connection.release();
+
+  return musicResult;
+}
+
+exports.retrieveTotalGetChart = async function () {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const [musicResult] = await musicDao.getTotalChart(connection);
+
+  connection.release();
+
+  return musicResult;
+}

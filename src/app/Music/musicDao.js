@@ -272,7 +272,7 @@ async function setRecommend(connection, type, weath, musicId) {
 
 async function updateRecommend(connection, type, weath, musicId) {
   const recommendQuery = `
-  UPDATE Recommend SET musicId = ?, type = ? , weather = ? WHERE DATE(createAt) = CURRENT_DATE();
+  UPDATE Recommend SET musicId = ?, type = ? , weather = ? WHERE DATE(createAt) = CURRENT_DATE() AND feeling IS NULL;
     `;
   const [setRows] = await connection.query(recommendQuery, [musicId, type, weath]);
   return setRows;
@@ -297,12 +297,60 @@ async function setRecommend2(connection, type, feel, musicId) {
 
 async function updateRecommend2(connection, type, feel, musicId) {
   const recommendQuery = `
-  UPDATE Recommend SET musicId = ?, type = ? , feeling = ? WHERE DATE(createAt) = CURRENT_DATE();
+  UPDATE Recommend SET musicId = ?, type = ? , feeling = ? WHERE DATE(createAt) = CURRENT_DATE() AND weather IS NULL;
     `;
   const [setRows] = await connection.query(recommendQuery, [musicId, type, feel]);
   return setRows;
 }
+// 날씨 + 기분별 음악 조회
+async function retrieveMusicList1(connection) {
+  const existQuery = `
+  SELECT M.musicId, musicName, singer, genre, weather, feeling, DATE_FORMAT(r.createAt, "%Y-%m-%d") AS date
+  FROM Recommend r
+  LEFT OUTER JOIN Music M on r.musicId = M.musicId
+  WHERE DATE(createAt) = CURRENT_DATE() AND type = 0;
+    `;
+  const [existRows] = await connection.query(existQuery);
+  return existRows;
+}
 
+async function retrieveMusicList2(connection) {
+  const existQuery = `
+  SELECT M.musicId, musicName, singer, genre, weather, feeling, DATE_FORMAT(r.createAt, "%Y-%m-%d") AS date
+  FROM Recommend r
+  LEFT OUTER JOIN Music M on r.musicId = M.musicId
+  WHERE DATE(createAt) = CURRENT_DATE() AND type = 1;
+    `;
+  const [existRows] = await connection.query(existQuery);
+  return existRows;
+}
+
+async function getChart(connection, month) {
+  const existQuery = `
+  SELECT (SELECT (ROUND(COUNT(*) / (SELECT COUNT(*) FROM Recommend WHERE weather IS NULL AND MONTH(createAt) = ?),2)) FROM Recommend
+  WHERE feeling = 1 AND MONTH(createAt) = ?) AS percentage1, (SELECT (ROUND(COUNT(*) / (SELECT COUNT(*) FROM Recommend WHERE weather IS NULL AND MONTH(createAt) = ?),2))  FROM Recommend
+  WHERE feeling = 2 AND MONTH(createAt) = ?) AS percentage2, (SELECT (ROUND(COUNT(*) / (SELECT COUNT(*) FROM Recommend WHERE weather IS NULL AND MONTH(createAt) = ?),2))  FROM Recommend
+  WHERE feeling = 3 AND MONTH(createAt) = ?) AS percentage3,(SELECT (ROUND(COUNT(*) / (SELECT COUNT(*) FROM Recommend WHERE weather IS NULL AND MONTH(createAt) = ?),2))  FROM Recommend
+  WHERE feeling = 4 AND MONTH(createAt) = ?) AS percentage4, (SELECT (ROUND(COUNT(*) / (SELECT COUNT(*) FROM Recommend WHERE weather IS NULL AND MONTH(createAt) = ?),2))  FROM Recommend
+  WHERE feeling = 5 AND MONTH(createAt) = ?) AS percentage5;
+    `;
+  const [existRows] = await connection.query(existQuery, [month, month, month, month, month, month, month, month, month, month]);
+  return existRows;
+}
+
+
+async function getTotalChart(connection) {
+  const existQuery = `
+    SELECT (SELECT (ROUND(COUNT(*) / (SELECT COUNT(*) FROM Recommend WHERE weather IS NULL ),2)) FROM Recommend
+    WHERE feeling = 1 ) AS percentage1, (SELECT (ROUND(COUNT(*) / (SELECT COUNT(*) FROM Recommend WHERE weather IS NULL),2))  FROM Recommend
+    WHERE feeling = 2 ) AS percentage2, (SELECT (ROUND(COUNT(*) / (SELECT COUNT(*) FROM Recommend WHERE weather IS NULL),2))  FROM Recommend
+    WHERE feeling = 3 ) AS percentage3,(SELECT (ROUND(COUNT(*) / (SELECT COUNT(*) FROM Recommend WHERE weather IS NULL),2))  FROM Recommend
+    WHERE feeling = 4 ) AS percentage4, (SELECT (ROUND(COUNT(*) / (SELECT COUNT(*) FROM Recommend WHERE weather IS NULL),2))  FROM Recommend
+    WHERE feeling = 5 ) AS percentage5;
+    `;
+  const [existRows] = await connection.query(existQuery);
+  return existRows;
+}
 // 유저 생성
 async function insertUserInfo(connection, insertUserInfoParams) {
   const insertUserInfoQuery = `
@@ -345,5 +393,9 @@ module.exports = {
   updateRecommend,
   existRecommend2,
   setRecommend2,
-  updateRecommend2
+  updateRecommend2,
+  retrieveMusicList1,
+  retrieveMusicList2,
+  getChart,
+  getTotalChart
 };
