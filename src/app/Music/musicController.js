@@ -349,40 +349,32 @@ exports.weatherMusics = async function (req, res) {
     // fooPromise(weatherMusics);
 
     // *************************
-    
+
     var promise = new Promise(function (resolve, reject) {
         setTimeout(function () {
-            //console.log(weatherMusics);
+            return res.send({ "isSuccess": true, "code": 1000, "message": "날씨별 음악 조회 성공" , "result": { weatherMusics }});
         }, 3000)
-        async (weatherMusics, res) => {
-          try {
-            reso
+    });
 
-            // var type = 0;
-            // var weath = weather.weather;
-            // var musicId = weatherMusics.musicId;
+    // var type = 0;
+    // var weath = weather.weather;
+    // var musicId = weatherMusics.musicId;
+    
+    // const [checkRecommend] = await musicProvider.existRecommend();
+    // console.log(checkRecommend);
         
-            // const [checkRecommend] = await musicProvider.existRecommend();
-            // console.log(checkRecommend);
-            
-            // // 오늘의 Recommend에 저장된게 없으면 -------수정
-            // if (checkRecommend.exist == 0) {
-            //     const addRecommend = await musicService.setRecommend(type, weath, musicId);
-            // } else {
-            //     const updateRecommend = await musicService.updateRecommend(type, weath, musicId);
-            // }
-            // console.log("done!");
-            //resolve(weatherMusics);
-          } catch (error) {
-                console.log('사용자:', error);
-                return false;
-          }
-        }
-    });
-
-    promise.then((weatherMusics)=>{
-        return res.send({ "isSuccess": true, "code": 1000, "message": "날씨별 음악 조회 성공" , "result": { weatherMusics }});
-    });
+    // // 오늘의 Recommend에 저장된게 없으면 -------수정
+    // if (checkRecommend.exist == 0) {
+    //     const addRecommend = await musicService.setRecommend(type, weath, musicId);
+    // } else {
+    //     const updateRecommend = await musicService.updateRecommend(type, weath, musicId);
+    // }
+    // console.log("done!");
+    //return res.send(responsed);
+    
+    // promise.then(()=>{
+    //     return res.send({ "isSuccess": true, "code": 1000, "message": "날씨별 음악 조회 성공" , "result": { weatherMusics }});
+    // });
 
 
     
