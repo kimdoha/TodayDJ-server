@@ -48,7 +48,9 @@ module.exports = {
     
     // month
     NUM_MONTH: { "isSuccess": false, "code": 2027, "message": "월을 입력해주세요" },
-    
+    NUM_FOLDER: { "isSuccess": false, "code": 2028, "message": "폴더아이디를 입력해주세요" },
+    NUM_RECOMM: { "isSuccess": false, "code": 2029, "message": "추천노래 아이디를 입력해주세요" },
+
     // Response error
     SIGNUP_REDUNDANT_EMAIL : { "isSuccess": false, "code": 3001, "message":"중복된 이메일입니다." },
     SIGNUP_REDUNDANT_NICKNAME : { "isSuccess": false, "code": 3002, "message":"중복된 닉네임입니다." },

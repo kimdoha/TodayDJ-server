@@ -215,8 +215,8 @@ exports.retrieveYoutubeUrl = async function (weatherMusics) {
         console.log(error);
     }
     else {
-        //console.log(JSON.stringify(result, null, 2));
-        //console.log(result);
+        console.log(JSON.stringify(result, null, 2));
+        console.log(result);
         var resultjson = result.items[0];
         console.log(resultjson.snippet.thumbnails.high.url);
         console.log(resultjson.id.videoId);
@@ -235,6 +235,8 @@ exports.retrieveYoutubeUrl = async function (weatherMusics) {
         weatherMusics.imageUrl = thumbnailsImage;
         }
     });
+
+    
     setTimeout(function(){
        //console.log(weatherMusics);
        connection.release();
@@ -247,16 +249,18 @@ exports.settingRecommend = async function (type, weath, weatherMusics) {
   const connection = await pool.getConnection(async (conn) => conn);
   
   var musicId = weatherMusics.musicId;
-  console.log(type, weath, musicId);
-
+  //console.log(type, weath, musicId);
+  
   const [checkRecommend] = await musicDao.existRecommend(connection);
   console.log(checkRecommend);
 
   // 오늘의 Recommend에 저장된게 없으면 -------수정
   if (checkRecommend.exist == 0) {
       const addRecommend = await musicService.setRecommend(type, weath, musicId);
+
   } else {
       const updateRecommend = await musicService.updateRecommend(type, weath, musicId);
+
   }
   console.log("done!");
 
@@ -330,17 +334,17 @@ exports.settingRecommend2 = async function (type, feel, feelingMusics) {
   return;
 }
 // 날씨 + 음악별 노래 조회 
-exports.retrieveMusicList1 = async function () {
+exports.retrieveMusicList1 = async function (year, mon, day) {
   const connection = await pool.getConnection(async (conn) => conn);
-  const [musicResult] = await musicDao.retrieveMusicList1(connection);
+  const [musicResult] = await musicDao.retrieveMusicList1(connection, year, mon, day);
 
   connection.release();
 
   return musicResult;
 }
-exports.retrieveMusicList2 = async function () {
+exports.retrieveMusicList2 = async function (year, mon, day) {
   const connection = await pool.getConnection(async (conn) => conn);
-  const [musicResult] = await musicDao.retrieveMusicList2(connection);
+  const [musicResult] = await musicDao.retrieveMusicList2(connection, year, mon, day);
 
   connection.release();
 

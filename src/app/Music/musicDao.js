@@ -303,25 +303,25 @@ async function updateRecommend2(connection, type, feel, musicId) {
   return setRows;
 }
 // 날씨 + 기분별 음악 조회
-async function retrieveMusicList1(connection) {
+async function retrieveMusicList1(connection, year, mon, day) {
   const existQuery = `
-  SELECT M.musicId, musicName, singer, genre, weather, feeling, DATE_FORMAT(r.createAt, "%Y-%m-%d") AS date
+  SELECT recomId, M.musicId, musicName, singer, genre, weather, feeling
   FROM Recommend r
   LEFT OUTER JOIN Music M on r.musicId = M.musicId
-  WHERE DATE(createAt) = CURRENT_DATE() AND type = 0;
+  WHERE YEAR(createAt) = ? AND MONTH(createAt) = ? AND DAYOFMONTH(createAt) = ? AND type = 0;
     `;
-  const [existRows] = await connection.query(existQuery);
+  const [existRows] = await connection.query(existQuery, [year, mon, day]);
   return existRows;
 }
 
-async function retrieveMusicList2(connection) {
+async function retrieveMusicList2(connection, year, mon, day) {
   const existQuery = `
-  SELECT M.musicId, musicName, singer, genre, weather, feeling, DATE_FORMAT(r.createAt, "%Y-%m-%d") AS date
+  SELECT recomId, M.musicId, musicName, singer, genre, weather, feeling
   FROM Recommend r
   LEFT OUTER JOIN Music M on r.musicId = M.musicId
-  WHERE DATE(createAt) = CURRENT_DATE() AND type = 1;
+  WHERE YEAR(createAt) = ? AND MONTH(createAt) = ? AND DAYOFMONTH(createAt) = ? AND type = 1;
     `;
-  const [existRows] = await connection.query(existQuery);
+  const [existRows] = await connection.query(existQuery, [year, mon, day]);
   return existRows;
 }
 

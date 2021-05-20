@@ -281,6 +281,7 @@ exports.weatherMusics = async function (req, res) {
     await musicProvider.retrieveYoutubeUrl(weatherMusics);
     var type = 0;
     var weath = weather.weather;
+    await musicService.setYoutubeUrl(weatherMusics);
     await musicProvider.settingRecommend(type, weath, weatherMusics);
     
 
@@ -443,15 +444,24 @@ exports.feelingMusics = async function (req, res) {
 
 exports.getMusicList = async function (req, res) {
 
-    const musicList1 = await musicProvider.retrieveMusicList1();
-    const musicList2 = await musicProvider.retrieveMusicList2();
+    const year = req.params.year;
+    const mon = req.params.mon;
+    const day = req.params.day;
+
+    const musicList1 = await musicProvider.retrieveMusicList1(year, mon, day);
+    const musicList2 = await musicProvider.retrieveMusicList2(year, mon, day);
     console.log(musicList1, musicList2);
-    if(musicList1.length < 1 || musicList2.length < 1)
+
+    if(!musicList1 && !musicList2)
         return res.send(baseResponse.EMPTY_WEATHERFEELING_RESULT);
 
     let totalData = [];
-    totalData[0] = musicList1;
-    totalData[1] = musicList2;
+    if(musicList1){
+        totalData[0] = musicList1;
+    } 
+    if(musicList2){
+        totalData[1] = musicList2;
+    }
     return res.send(response({ "isSuccess": true, "code": 1000, "message": "날씨 + 기분 음악 조회 성공" }, totalData ));
 };
 
@@ -471,7 +481,38 @@ exports.getChart= async function (req, res) {
 exports.getTotalChart = async function (req, res) {
 
     const chart = await musicProvider.retrieveTotalGetChart();
-
-
     return res.send(response({ "isSuccess": true, "code": 1000, "message": "전체 기분별 통계 성공" }, chart ));
 };
+
+// 플레이리스트 좋아요
+// exports.postLike = async function (req, res) {
+//     const folderId = req.params.folderId;
+//     const recomId = req.params.recomId;
+
+//     if(!folderId)
+//         return res.send(response(baseResponse.NUM_FOLDER));
+//     if(!recomId)
+//         return res.send(response(baseResponse.NUM_RECOMM));
+
+//     // 숫자 형식 체크
+//     var regExp = /^[0-9]+$/;
+//     if(!regExp.test(folderId) || !regExp.test(recomId))
+//         return res.send(response(baseResponse.INPUT_NUMBER));
+    
+    
+//     const [checkStatus] = await musicProvider.existFolder(folderId);
+//     const [folderStatus] = await musicProvider.folderStatus(folderId);
+
+//     if (checkStatus.exist == 0) {
+//         const addFolder = await musicService.setFolder(folderId, folderName);
+//         return res.send(addFolder);
+//     } else {
+//         if (folderStatus.status == 1) {
+//             const updateFolderDelete = await musicService.deleteFolder(folderId, folderName);
+//             return res.send(updateFolderDelete);
+//         } else {
+//             const updateFolderAdd = await musicService.updateFolder(folderId, folderName);
+//             return res.send(updateFolderAdd);
+//         }
+//     }
+// };

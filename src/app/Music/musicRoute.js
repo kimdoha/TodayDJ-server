@@ -6,7 +6,7 @@ module.exports = function(app){
     app.get('/weather',music.getWeather); 
 
     // 2. 날씨별 + 기분별 음악 정보 조회 [캘린더 팝업 화면]
-    app.get('/music',music.getMusicList); 
+    app.get('/music/year/:year/mon/:mon/day/:day',music.getMusicList); 
 
     // 9. 월별 기분별 통계
     app.get('/feeling/chart/:month', music.getChart);
@@ -32,6 +32,6 @@ module.exports = function(app){
     // 11. 개인 정보 설정 저장
     app.route('/user/:type1/:type2').post(music.setUser);
 
-    // 12.
-    //app.get('/oct',music.getOct);
+    // 7. 플레이 리스트 좋아요 생성 및 취소
+    //app.route('/playlist/like/:folderId/:musicId').post(music.postLike);
 };

@@ -258,3 +258,19 @@ exports.updateRecommend2 = async function (type, feel, musicId){
     }
 };
 
+
+exports.setYoutubeUrl = async function (weatherMusics){
+    try {
+
+        const connection = await pool.getConnection(async (conn) => conn);
+        console.log("before");
+        const recommendResult = await musicDao.setRecommend2(connection, weatherMusics);
+        console.log(`추가된 회원 : ${recommendResult.insertId}`)
+        connection.release();
+        return;
+
+    } catch (err) {
+        logger.error(`App - SetRecommend2 Service error\n: ${err.message}`);
+        return errResponse(baseResponse.DB_ERROR);
+    }
+};
