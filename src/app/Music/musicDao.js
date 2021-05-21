@@ -289,7 +289,7 @@ async function existRecommend2(connection) {
 
 async function setRecommend2(connection, type, feel, musicId) {
   const recommendQuery = `
-  INSERT INTO Recommend(musicId, type, feeling) VALUES(?, ?, ?);
+      INSERT INTO Recommend(musicId, type, feeling) VALUES(?, ?, ?);
     `;
   const [setRows] = await connection.query(recommendQuery, [musicId, type, feel]);
   return setRows;
@@ -297,7 +297,7 @@ async function setRecommend2(connection, type, feel, musicId) {
 
 async function updateRecommend2(connection, type, feel, musicId) {
   const recommendQuery = `
-  UPDATE Recommend SET musicId = ?, type = ? , feeling = ? WHERE DATE(createAt) = CURRENT_DATE() AND weather IS NULL;
+      UPDATE Recommend SET musicId = ?, type = ? , feeling = ? WHERE DATE(createAt) = CURRENT_DATE() AND weather IS NULL;
     `;
   const [setRows] = await connection.query(recommendQuery, [musicId, type, feel]);
   return setRows;

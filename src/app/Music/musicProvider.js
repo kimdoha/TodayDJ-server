@@ -208,8 +208,8 @@ exports.retrieveYoutubeUrl = async function (weatherMusics) {
   var YouTube = require('youtube-node');
   var youTube = new YouTube();
   var youTubeUrl = 'https://www.youtube.com/watch?v=';
-  youTube.setKey('AIzaSyBZp3ma4FykMG9vEjSmsm42fC8aOtUA0oQ');
-
+  //youTube.setKey('AIzaSyBZp3ma4FykMG9vEjSmsm42fC8aOtUA0oQ');
+  youTube.setKey('AIzaSyABr_zvB4ZRyLUHUB1DHx-RvNxPs9Gp4yI')
   youTube.search(weatherMusics.musicName + " " + weatherMusics.singer + " MV", 2, {type: 'video', videoLicense:'youtube'},function(error, result) {
     if (error) {
         console.log(error);

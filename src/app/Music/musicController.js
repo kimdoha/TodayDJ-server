@@ -223,7 +223,6 @@ exports.weatherMusics = async function (req, res) {
     const weather = await musicProvider.retrieveWeather();
     if(!weather)
         return res.send(response(baseResponse.EMPTY_WEATHER_RESULT));
-
     
     var thunderstormWeather1 = ['thunderstorm with light rain', 'thunderstorm with rain', 'light thunderstorm'];
     var thunderstormWeather2 = [ 'thunderstorm with heavy rain','thunderstorm','heavy thunderstorm', 'ragged thunderstorm', 'thunderstorm with light drizzle', 'thunderstorm with drizzle', 'thunderstorm with heavy drizzle'];
@@ -281,7 +280,7 @@ exports.weatherMusics = async function (req, res) {
     await musicProvider.retrieveYoutubeUrl(weatherMusics);
     var type = 0;
     var weath = weather.weather;
-    await musicService.setYoutubeUrl(weatherMusics);
+    //await musicService.setYoutubeUrl(weatherMusics);
     await musicProvider.settingRecommend(type, weath, weatherMusics);
     
 
