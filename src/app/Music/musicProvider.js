@@ -204,6 +204,7 @@ exports.retrieveWeatherMusic4 = async function () {
 // 날씨에 따른 노래 추천 조회
 exports.retrieveYoutubeUrl = async function (weatherMusics) {
   const connection = await pool.getConnection(async (conn) => conn);
+  var musicId = weatherMusics.musicId;
 
   var YouTube = require('youtube-node');
   var youTube = new YouTube();
@@ -215,8 +216,8 @@ exports.retrieveYoutubeUrl = async function (weatherMusics) {
         console.log(error);
     }
     else {
-        console.log(JSON.stringify(result, null, 2));
-        console.log(result);
+        //console.log(JSON.stringify(result, null, 2));
+        //console.log(result);
         var resultjson = result.items[0];
         console.log(resultjson.snippet.thumbnails.high.url);
         console.log(resultjson.id.videoId);
@@ -233,12 +234,16 @@ exports.retrieveYoutubeUrl = async function (weatherMusics) {
         
         weatherMusics.youtubeUrl = youTubeUrl;
         weatherMusics.imageUrl = thumbnailsImage;
+
+        
         }
     });
 
     
+    
     setTimeout(function(){
        //console.log(weatherMusics);
+      
        connection.release();
        return weatherMusics;
     
@@ -249,7 +254,7 @@ exports.settingRecommend = async function (type, weath, weatherMusics) {
   const connection = await pool.getConnection(async (conn) => conn);
   
   var musicId = weatherMusics.musicId;
-  //console.log(type, weath, musicId);
+  
   
   const [checkRecommend] = await musicDao.existRecommend(connection);
   console.log(checkRecommend);
@@ -257,10 +262,16 @@ exports.settingRecommend = async function (type, weath, weatherMusics) {
   // 오늘의 Recommend에 저장된게 없으면 -------수정
   if (checkRecommend.exist == 0) {
       const addRecommend = await musicService.setRecommend(type, weath, musicId);
-
+      var youtubeUrl = weatherMusics.youtubeUrl;
+      var imageUrl = weatherMusics.imageUrl;
+      console.log(">>>>>", youtubeUrl, imageUrl);
+      await musicService.updateYoutubeInfo(musicId, youtubeUrl, imageUrl);
   } else {
       const updateRecommend = await musicService.updateRecommend(type, weath, musicId);
-
+      var youtubeUrl = weatherMusics.youtubeUrl;
+      var imageUrl = weatherMusics.imageUrl;
+      console.log(">>>>>", youtubeUrl, imageUrl);
+      await musicService.updateYoutubeInfo(musicId, youtubeUrl, imageUrl);
   }
   console.log("done!");
 
@@ -276,7 +287,8 @@ exports.retrieveYoutubeUrl2 = async function (feelingMusics) {
   var YouTube = require('youtube-node');
   var youTube = new YouTube();
   var youTubeUrl = 'https://www.youtube.com/watch?v=';
-  youTube.setKey('AIzaSyBZp3ma4FykMG9vEjSmsm42fC8aOtUA0oQ');
+  //youTube.setKey('AIzaSyBZp3ma4FykMG9vEjSmsm42fC8aOtUA0oQ');
+  youTube.setKey('AIzaSyABr_zvB4ZRyLUHUB1DHx-RvNxPs9Gp4yI')
   var musicId = feelingMusics[0].musicId;
 
   youTube.search(feelingMusics[0].musicName + " " + feelingMusics[0].singer + " MV", 2, {type: 'video', videoLicense:'youtube'},function(error, result) {

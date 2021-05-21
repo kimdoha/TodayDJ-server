@@ -351,6 +351,16 @@ async function getTotalChart(connection) {
   const [existRows] = await connection.query(existQuery);
   return existRows;
 }
+
+async function updateYoutubeInfo(connection, musicId, youtubeUrl, imageUrl) {
+  const existQuery = `
+    UPDATE Music SET youtubeUrl = ?, imageUrl = ? WHERE musicId = ?;
+    `;
+  const [existRows] = await connection.query(existQuery, [youtubeUrl, imageUrl, musicId ]);
+  return existRows;
+}
+
+
 // 유저 생성
 async function insertUserInfo(connection, insertUserInfoParams) {
   const insertUserInfoQuery = `
@@ -397,5 +407,6 @@ module.exports = {
   retrieveMusicList1,
   retrieveMusicList2,
   getChart,
-  getTotalChart
+  getTotalChart,
+  updateYoutubeInfo
 };
