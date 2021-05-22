@@ -52,7 +52,7 @@ const {emit} = require("nodemon");
 exports.getWeather = async function (req, res) {
 
     const geolocation = require ('google-geolocation') ({
-        key: 'AIzaSyBZp3ma4FykMG9vEjSmsm42fC8aOtUA0oQ',
+        key: 'AIzaSyABr_zvB4ZRyLUHUB1DHx-RvNxPs9Gp4yI',
         timeout: 2000
       });
 
@@ -484,34 +484,31 @@ exports.getTotalChart = async function (req, res) {
 };
 
 // 플레이리스트 좋아요
-// exports.postLike = async function (req, res) {
-//     const folderId = req.params.folderId;
-//     const recomId = req.params.recomId;
+// playlist/like/:recomId
+exports.postLike = async function (req, res) {
+    const recomId = req.params.recomId;
 
-//     if(!folderId)
-//         return res.send(response(baseResponse.NUM_FOLDER));
-//     if(!recomId)
-//         return res.send(response(baseResponse.NUM_RECOMM));
+    if(!recomId)
+        return res.send(response(baseResponse.NUM_RECOMM));
 
-//     // 숫자 형식 체크
-//     var regExp = /^[0-9]+$/;
-//     if(!regExp.test(folderId) || !regExp.test(recomId))
-//         return res.send(response(baseResponse.INPUT_NUMBER));
+    // 숫자 형식 체크
+    var regExp = /^[0-9]+$/;
+    if(!regExp.test(recomId))
+        return res.send(response(baseResponse.INPUT_NUMBER));
     
-    
-//     const [checkStatus] = await musicProvider.existFolder(folderId);
-//     const [folderStatus] = await musicProvider.folderStatus(folderId);
+    const [checkStatus] = await musicProvider.existPlaylist(recomId);
+    const [likeStatus] = await musicProvider.likeStatus(recomId);
 
-//     if (checkStatus.exist == 0) {
-//         const addFolder = await musicService.setFolder(folderId, folderName);
-//         return res.send(addFolder);
-//     } else {
-//         if (folderStatus.status == 1) {
-//             const updateFolderDelete = await musicService.deleteFolder(folderId, folderName);
-//             return res.send(updateFolderDelete);
-//         } else {
-//             const updateFolderAdd = await musicService.updateFolder(folderId, folderName);
-//             return res.send(updateFolderAdd);
-//         }
-//     }
-// };
+    if (checkStatus.exist == 0) {
+        const addFolder = await musicService.setPlaylist(recomId);
+        return res.send(addFolder);
+    } else {
+        if (likeStatus.status == 1) {
+            const likeDelete = await musicService.deleteLike(recomId);
+            return res.send(likeDelete);
+        } else {
+            const likeAdd = await musicService.updateLike(recomId);
+            return res.send(likeAdd);
+        }
+    }
+};

@@ -33,5 +33,5 @@ module.exports = function(app){
     app.route('/user/:type1/:type2').post(music.setUser);
 
     // 7. 플레이 리스트 좋아요 생성 및 취소
-    //app.route('/playlist/like/:folderId/:musicId').post(music.postLike);
+    app.route('/playlist/like/:recomId').post(music.postLike);
 };

@@ -204,46 +204,52 @@ exports.retrieveWeatherMusic4 = async function () {
 // 날씨에 따른 노래 추천 조회
 exports.retrieveYoutubeUrl = async function (weatherMusics) {
   const connection = await pool.getConnection(async (conn) => conn);
-  var musicId = weatherMusics.musicId;
 
-  var YouTube = require('youtube-node');
-  var youTube = new YouTube();
-  var youTubeUrl = 'https://www.youtube.com/watch?v=';
-  //youTube.setKey('AIzaSyBZp3ma4FykMG9vEjSmsm42fC8aOtUA0oQ');
-  youTube.setKey('AIzaSyABr_zvB4ZRyLUHUB1DHx-RvNxPs9Gp4yI')
-  youTube.search(weatherMusics.musicName + " " + weatherMusics.singer + " MV", 2, {type: 'video', videoLicense:'youtube'},function(error, result) {
-    if (error) {
-        console.log(error);
-    }
-    else {
-        //console.log(JSON.stringify(result, null, 2));
-        //console.log(result);
-        var resultjson = result.items[0];
-        console.log(resultjson.snippet.thumbnails.high.url);
-        console.log(resultjson.id.videoId);
-        if(resultjson.snippet.thumbnails.high.url){
-            var thumbnailsImage = resultjson.snippet.thumbnails.high.url;
-        } else {
-            var thumbnailsImage = "";
-        }
-        if(resultjson.id.videoId){
-            youTubeUrl += resultjson.id.videoId;
-        } else {
-            youTubeUrl = "";
-        }
-        
-        weatherMusics.youtubeUrl = youTubeUrl;
-        weatherMusics.imageUrl = thumbnailsImage;
+    var musicId = weatherMusics.musicId;
 
-        
-        }
-    });
+    var YouTube = require('youtube-node');
+    var youTube = new YouTube();
+    var youTubeUrl = 'https://www.youtube.com/watch?v=';
+    var thumbnailsImage = "";
 
+    //youTube.setKey('AIzaSyBZp3ma4FykMG9vEjSmsm42fC8aOtUA0oQ');
+    youTube.setKey('AIzaSyCONq4eoFv--fhsmf2C-gnbSdunHyStpSw');
     
+    youTube.search(weatherMusics.musicName + " " + weatherMusics.singer + " MV", 2, {type: 'video', videoLicense:'youtube'},function(error, result) {
+      if (error) {
+          console.log(error);
+      }
+      else {
+          //console.log(JSON.stringify(result, null, 2));
+          //console.log(result);
+          var resultjson = result.items[0];
+          console.log(resultjson.snippet.thumbnails.high.url);
+          console.log(resultjson.id.videoId);
+          if(resultjson.snippet.thumbnails.high.url){
+              thumbnailsImage = resultjson.snippet.thumbnails.high.url;
+          } else {
+              thumbnailsImage = "";
+          }
+          if(resultjson.id.videoId){
+              youTubeUrl += resultjson.id.videoId;
+          } else {
+              youTubeUrl = "";
+          }
+          
+          weatherMusics.youtubeUrl = youTubeUrl;
+          weatherMusics.imageUrl = thumbnailsImage;
+
+          }
+        });
     
-    setTimeout(function(){
+
+    // console.log("asyncccc");
+    //await musicService.updateYoutubeInfo(musicId, youTubeUrl, thumbnailsImage);
+    
+    setTimeout(async function(){
        //console.log(weatherMusics);
-      
+       //console.log("youTubeUrl", youTubeUrl, "Thunbnail", thumbnailsImage);
+       await musicService.updateYoutubeInfo(musicId, youTubeUrl, thumbnailsImage);
        connection.release();
        return weatherMusics;
     
@@ -262,16 +268,10 @@ exports.settingRecommend = async function (type, weath, weatherMusics) {
   // 오늘의 Recommend에 저장된게 없으면 -------수정
   if (checkRecommend.exist == 0) {
       const addRecommend = await musicService.setRecommend(type, weath, musicId);
-      var youtubeUrl = weatherMusics.youtubeUrl;
-      var imageUrl = weatherMusics.imageUrl;
-      console.log(">>>>>", youtubeUrl, imageUrl);
-      await musicService.updateYoutubeInfo(musicId, youtubeUrl, imageUrl);
+
   } else {
       const updateRecommend = await musicService.updateRecommend(type, weath, musicId);
-      var youtubeUrl = weatherMusics.youtubeUrl;
-      var imageUrl = weatherMusics.imageUrl;
-      console.log(">>>>>", youtubeUrl, imageUrl);
-      await musicService.updateYoutubeInfo(musicId, youtubeUrl, imageUrl);
+
   }
   console.log("done!");
 
@@ -287,8 +287,10 @@ exports.retrieveYoutubeUrl2 = async function (feelingMusics) {
   var YouTube = require('youtube-node');
   var youTube = new YouTube();
   var youTubeUrl = 'https://www.youtube.com/watch?v=';
+  var thumbnailsImage = "";
   //youTube.setKey('AIzaSyBZp3ma4FykMG9vEjSmsm42fC8aOtUA0oQ');
-  youTube.setKey('AIzaSyABr_zvB4ZRyLUHUB1DHx-RvNxPs9Gp4yI')
+  
+  youTube.setKey('AIzaSyCONq4eoFv--fhsmf2C-gnbSdunHyStpSw')
   var musicId = feelingMusics[0].musicId;
 
   youTube.search(feelingMusics[0].musicName + " " + feelingMusics[0].singer + " MV", 2, {type: 'video', videoLicense:'youtube'},function(error, result) {
@@ -296,14 +298,14 @@ exports.retrieveYoutubeUrl2 = async function (feelingMusics) {
       console.log(error);
   }
   else {
-      console.log(JSON.stringify(result, null, 2));
+      //console.log(JSON.stringify(result, null, 2));
       var resultjson = result.items[0];
       console.log(resultjson.snippet.thumbnails.high.url);
       console.log(resultjson.id.videoId);
       if(resultjson.snippet.thumbnails.high.url){
-          var thumbnailsImage = resultjson.snippet.thumbnails.high.url;
+          thumbnailsImage = resultjson.snippet.thumbnails.high.url;
       } else {
-          var thumbnailsImage = "";
+          thumbnailsImage = "";
       }
       if(resultjson.id.videoId){
           youTubeUrl += resultjson.id.videoId;
@@ -316,8 +318,9 @@ exports.retrieveYoutubeUrl2 = async function (feelingMusics) {
 
   }
 });
-    setTimeout(function(){
+    setTimeout(async function(){
        //console.log(weatherMusics);
+       await musicService.updateYoutubeInfo(musicId, youTubeUrl, thumbnailsImage);
        connection.release();
        return feelingMusics;
     
@@ -371,3 +374,21 @@ exports.retrieveTotalGetChart = async function () {
 
   return musicResult;
 }
+
+// 플레이리스트
+exports.existPlaylist = async function (recomId) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const existResult = await musicDao.existPlaylist(connection, recomId);
+  connection.release();
+
+  return existResult;
+}
+
+
+exports.likeStatus = async function (recomId) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const statusResult = await musicDao.getLikeStatus(connection, recomId);
+  connection.release();
+
+  return statusResult;
+};

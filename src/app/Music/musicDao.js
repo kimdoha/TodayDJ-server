@@ -305,10 +305,10 @@ async function updateRecommend2(connection, type, feel, musicId) {
 // 날씨 + 기분별 음악 조회
 async function retrieveMusicList1(connection, year, mon, day) {
   const existQuery = `
-  SELECT recomId, M.musicId, musicName, singer, genre, weather, feeling
+  SELECT recomId, M.musicId, musicName, singer, genre, weather, feeling, imageUrl, youtubeUrl
   FROM Recommend r
   LEFT OUTER JOIN Music M on r.musicId = M.musicId
-  WHERE YEAR(createAt) = ? AND MONTH(createAt) = ? AND DAYOFMONTH(createAt) = ? AND type = 0;
+    WHERE YEAR(createAt) = ? AND MONTH(createAt) = ? AND DAYOFMONTH(createAt) = ? AND type = 0;
     `;
   const [existRows] = await connection.query(existQuery, [year, mon, day]);
   return existRows;
@@ -316,10 +316,10 @@ async function retrieveMusicList1(connection, year, mon, day) {
 
 async function retrieveMusicList2(connection, year, mon, day) {
   const existQuery = `
-  SELECT recomId, M.musicId, musicName, singer, genre, weather, feeling
+  SELECT recomId, M.musicId, musicName, singer, genre, weather, feeling, imageUrl, youtubeUrl
   FROM Recommend r
   LEFT OUTER JOIN Music M on r.musicId = M.musicId
-  WHERE YEAR(createAt) = ? AND MONTH(createAt) = ? AND DAYOFMONTH(createAt) = ? AND type = 1;
+    WHERE YEAR(createAt) = ? AND MONTH(createAt) = ? AND DAYOFMONTH(createAt) = ? AND type = 1;
     `;
   const [existRows] = await connection.query(existQuery, [year, mon, day]);
   return existRows;
@@ -360,16 +360,47 @@ async function updateYoutubeInfo(connection, musicId, youtubeUrl, imageUrl) {
   return existRows;
 }
 
-
-// 유저 생성
-async function insertUserInfo(connection, insertUserInfoParams) {
-  const insertUserInfoQuery = `
-        INSERT INTO UserInfo(email, password, nickname)
-        VALUES (?, ?, ?);
-    `;
-  const insertUserInfoRow = await connection.query(insertUserInfoQuery, insertUserInfoParams);
-  return insertUserInfoRow;
+// 플레이리스트
+async function existPlaylist(connection, recomId) {
+  const existQuery = `
+    SELECT EXISTS(SELECT recomId FROM LikeTB WHERE recomId = ?) AS exist;
+  `;
+  const [existRows] = await connection.query(existQuery, recomId);
+  return existRows;
 }
+
+async function getLikeStatus(connection, recomId) {
+  const statusQuery = `
+    SELECT status FROM LikeTB WHERE recomId = ?;
+                `;
+  const [statusRows] = await connection.query(statusQuery, recomId);
+  return statusRows;
+}
+
+async function addPlaylist(connection, recomId) {
+  const addFolderQuery = `
+    INSERT INTO LikeTB(recomId) VALUES (?);
+                 `;
+  const [folderRow] = await connection.query(addFolderQuery, recomId);
+  return folderRow;
+}
+
+async function likeDelete(connection, recomId) {
+  const deleteFolderQuery = `
+    UPDATE LikeTB SET status = 0 WHERE recomId = ?;
+    `;
+  const [folderRow] = await connection.query(deleteFolderQuery, recomId);
+  return folderRow;
+}
+
+async function updateLike(connection, recomId) {
+  const updateFolderQuery = `
+    UPDATE LikeTB SET status = 1 WHERE recomId = ?;
+      `;
+  const [folderRow] = await connection.query(updateFolderQuery, recomId);
+  return folderRow;
+}
+
 module.exports = {
   existFolder,
   getFolderStatus,
@@ -408,5 +439,11 @@ module.exports = {
   retrieveMusicList2,
   getChart,
   getTotalChart,
-  updateYoutubeInfo
+  updateYoutubeInfo,
+  existPlaylist,
+  getLikeStatus,
+  addPlaylist,
+  likeDelete,
+  updateLike
+
 };

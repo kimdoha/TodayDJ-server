@@ -273,3 +273,52 @@ exports.updateYoutubeInfo = async function (musicId, youtubeUrl, imageUrl){
         return errResponse(baseResponse.DB_ERROR);
     }
 };
+
+// 플레이리스트
+exports.setPlaylist = async function (recomId) {
+    try {
+
+        const connection = await pool.getConnection(async (conn) => conn);
+        console.log("before");
+        const likeResult = await musicDao.addPlaylist(connection, recomId);
+        console.log(`추가된 회원 : ${likeResult.insertId}`)
+        connection.release();
+        return response({ "isSuccess": true, "code": 1000, "message":"플레이리스트에 추가되었습니다." },{ "recomId": recomId });
+
+    } catch (err) {
+        logger.error(`App - SetPlaylistService error\n: ${err.message}`);
+        return errResponse(baseResponse.DB_ERROR);
+    }
+};
+
+exports.deleteLike = async function (recomId) {
+    try {
+
+        const connection = await pool.getConnection(async (conn) => conn);
+        console.log("before");
+        const likeResult = await musicDao.likeDelete(connection, recomId);
+        console.log(`추가된 회원 : ${likeResult.insertId}`)
+        connection.release();
+        return response({ "isSuccess": true, "code": 1000, "message":"폴더 삭제되었습니다." }, { "recomId": recomId });
+
+    } catch (err) {
+        logger.error(`App - DeleteLike Service error\n: ${err.message}`);
+        return errResponse(baseResponse.DB_ERROR);
+    }
+};
+
+exports.updateLike = async function (recomId) {
+    try {
+
+        const connection = await pool.getConnection(async (conn) => conn);
+        console.log("before");
+        const likeResult = await musicDao.updateLike(connection, recomId);
+        console.log(`추가된 회원 : ${likeResult.insertId}`)
+        connection.release();
+        return response({ "isSuccess": true, "code": 1000, "message":"플레이리스트에 추가되었습니다." }, { "recomId": recomId });
+
+    } catch (err) {
+        logger.error(`App - UpdateFolder Service error\n: ${err.message}`);
+        return errResponse(baseResponse.DB_ERROR);
+    }
+};
