@@ -299,7 +299,7 @@ exports.deleteLike = async function (recomId) {
         const likeResult = await musicDao.likeDelete(connection, recomId);
         console.log(`추가된 회원 : ${likeResult.insertId}`)
         connection.release();
-        return response({ "isSuccess": true, "code": 1000, "message":"폴더 삭제되었습니다." }, { "recomId": recomId });
+        return response({ "isSuccess": true, "code": 1000, "message":"플레이리스트에서 삭제되었습니다." }, { "recomId": recomId });
 
     } catch (err) {
         logger.error(`App - DeleteLike Service error\n: ${err.message}`);

@@ -401,6 +401,18 @@ async function updateLike(connection, recomId) {
   return folderRow;
 }
 
+async function existRecommendd(connection, recomId) {
+  const existQuery = `
+      SELECT *
+      FROM Recommend r
+      INNER JOIN Music m ON m.musicId = r.musicId
+      WHERE imageUrl IS NOT NULL AND youtubeUrl IS NOT NULL
+        AND recomId = ?;
+      `;
+  const [existRow] = await connection.query(existQuery, recomId);
+  return existRow;
+}
+
 module.exports = {
   existFolder,
   getFolderStatus,
@@ -444,6 +456,7 @@ module.exports = {
   getLikeStatus,
   addPlaylist,
   likeDelete,
-  updateLike
+  updateLike,
+  existRecommendd
 
 };

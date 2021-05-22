@@ -392,3 +392,11 @@ exports.likeStatus = async function (recomId) {
 
   return statusResult;
 };
+
+exports.existRecommend = async function (recomId) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const statusResult = await musicDao.existRecommendd(connection, recomId);
+  connection.release();
+
+  return statusResult;
+};

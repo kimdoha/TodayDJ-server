@@ -70,6 +70,8 @@ module.exports = {
     
     // 날씨 + 기분별
     EMPTY_WEATHERFEELING_RESULT : { "isSuccess": false, "code": 3010, "message": "추천 받은 노래가 없습니다" },
+    
+    PLAYLIST_RESULT : { "isSuccess": false, "code": 3011, "message": "플레이리스트에 저장할 수 없는 노래입니다." },
     //Connection, Transaction 등의 서버 오류
     DB_ERROR : { "isSuccess": false, "code": 4000, "message": "데이터 베이스 에러"},
     SERVER_ERROR : { "isSuccess": false, "code": 4001, "message": "서버 에러"},

@@ -496,6 +496,10 @@ exports.postLike = async function (req, res) {
     if(!regExp.test(recomId))
         return res.send(response(baseResponse.INPUT_NUMBER));
     
+    const recomStatus = await musicProvider.existRecommend(recomId);
+    if(recomStatus.length < 1)
+        return res.send(response(baseResponse.PLAYLIST_RESULT));
+
     const [checkStatus] = await musicProvider.existPlaylist(recomId);
     const [likeStatus] = await musicProvider.likeStatus(recomId);
 
