@@ -37,6 +37,6 @@ module.exports = function(app){
 
     // 12. 플레이리스트 정보조회 기분별 필터
     // /playlist/weather/:num	플레이리스트 정보조회 날씨별 필터
-    app.get('/playlist/feeling/:num',music.feelingPlaylist);
+    //app.get('/playlist/feeling/:num',music.feelingPlaylist);
 
 };
