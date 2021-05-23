@@ -365,6 +365,15 @@ exports.retrieveMusicList2 = async function (year, mon, day) {
 
   return musicResult;
 }
+exports.retrieveGetChart = async function (month) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const [musicResult] = await musicDao.getChart(connection, month);
+
+  connection.release();
+
+  return musicResult;
+}
+
 
 exports.retrieveTotalGetChart = async function () {
   const connection = await pool.getConnection(async (conn) => conn);
