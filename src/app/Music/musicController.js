@@ -516,3 +516,22 @@ exports.postLike = async function (req, res) {
         }
     }
 };
+
+exports.feelingPlaylist= async function (req, res) {
+
+    const num = req.params.num;
+    if (!num) return res.send(errResponse(baseResponse.FEELING_EMPTY));
+    
+    var regExp = /^[0-9]+$/;
+    if(!regExp.test(num))
+        return res.send(response(baseResponse.INPUT_NUMBER));
+
+    if(num < 1 || num > 5)
+        return res.send(response(baseResponse.FEELING_ID_EXCEED));
+
+    const playlist = await musicProvider.retrievePlaylistFeeling(num);
+    if(playlist.length< 1)
+        return res.send(response(baseResponse.EMPTY_PLAYLIST1_RESULT));
+
+    return res.send(response({ "isSuccess": true, "code": 1000, "message": "기분별 플레이리스트 조회 성공" }, playlist ));
+};

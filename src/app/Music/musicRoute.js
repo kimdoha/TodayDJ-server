@@ -14,9 +14,6 @@ module.exports = function(app){
     // 11. 전체 기분별 통계
     app.get('/feeling/totalchart', music.getTotalChart);
 
-    // jwt를 사용하기 위해 jwtMiddleware 를 체이닝 방식으로 추가하는 예제
-    // app.get('/app/users/:userId', jwtMiddleware, user.getUserById);
-    
     // 4. 입력한 기분 저장
     app.route('/feeling/:num').post(music.setFeeling);
     
@@ -34,4 +31,12 @@ module.exports = function(app){
 
     // 7. 플레이 리스트 좋아요 생성 및 취소
     app.route('/playlist/like/:recomId').post(music.postLike);
+
+    // 6. 플레이리스트 정보조회 기분별 필터
+    app.get('/playlist/feeling/:num',music.feelingPlaylist);
+
+    // 12. 플레이리스트 정보조회 기분별 필터
+    // /playlist/weather/:num	플레이리스트 정보조회 날씨별 필터
+    app.get('/playlist/feeling/:num',music.feelingPlaylist);
+
 };

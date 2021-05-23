@@ -413,6 +413,18 @@ async function existRecommendd(connection, recomId) {
   return existRow;
 }
 
+async function playlistfeeling(connection, num) {
+  const existQuery = `
+  SELECT r.musicId, feeling, musicName, singer, genre, youtubeUrl, imageUrl, DATE_FORMAT(l.createAt, "%Y-%m-%d") AS date
+  FROM LikeTB l
+  INNER JOIN Recommend r ON r.recomId = l.recomId
+  INNER JOIN Music M on r.musicId = M.musicId
+  WHERE feeling IS NOT NULL AND feeling = ?;
+      `;
+  const [existRow] = await connection.query(existQuery, num);
+  return existRow;
+}
+
 module.exports = {
   existFolder,
   getFolderStatus,
@@ -457,6 +469,7 @@ module.exports = {
   addPlaylist,
   likeDelete,
   updateLike,
-  existRecommendd
+  existRecommendd,
+  playlistfeeling
 
 };

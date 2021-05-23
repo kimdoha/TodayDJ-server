@@ -400,3 +400,12 @@ exports.existRecommend = async function (recomId) {
 
   return statusResult;
 };
+
+
+exports.retrievePlaylistFeeling = async function (num) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const playlistResult = await musicDao.playlistfeeling(connection, num);
+  connection.release();
+
+  return playlistResult;
+};
