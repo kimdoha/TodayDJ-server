@@ -425,6 +425,101 @@ async function playlistfeeling(connection, num) {
   return existRow;
 }
 
+
+async function playlistWeather1(connection, num) {
+  const existQuery = `
+  SELECT r.musicId, feeling, musicName, singer, genre, youtubeUrl, imageUrl, DATE_FORMAT(l.createAt, "%Y-%m-%d") AS date
+  FROM LikeTB l
+  INNER JOIN Recommend r ON r.recomId = l.recomId
+  INNER JOIN Music M on r.musicId = M.musicId
+  WHERE weather IS NOT NULL AND weather IN ('thunderstorm with light rain', 'thunderstorm with rain',
+                                            'light thunderstorm', 'thunderstorm with heavy rain','thunderstorm','heavy thunderstorm',
+                                            'ragged thunderstorm', 'thunderstorm with light drizzle', 'thunderstorm with drizzle',
+                                            'thunderstorm with heavy drizzle');
+      `;
+  const [existRow] = await connection.query(existQuery, num);
+  return existRow;
+}
+
+async function playlistWeather2(connection, num) {
+  const existQuery = `
+  SELECT r.musicId, feeling, musicName, singer, genre, youtubeUrl, imageUrl, DATE_FORMAT(l.createAt, "%Y-%m-%d") AS date
+  FROM LikeTB l
+  INNER JOIN Recommend r ON r.recomId = l.recomId
+  INNER JOIN Music M on r.musicId = M.musicId
+  WHERE weather IS NOT NULL AND weather IN ('light intensity drizzle', 'drizzle', 'light intensity drizzle rain','drizzle rain',
+               'heavy intensity drizzle','heavy intensity drizzle rain','shower rain and drizzle', 'heavy shower rain and drizzle', 'shower drizzle');
+      `;
+  const [existRow] = await connection.query(existQuery, num);
+  return existRow;
+}
+
+async function playlistWeather3(connection, num) {
+  const existQuery = `
+  SELECT r.musicId, feeling, musicName, singer, genre, youtubeUrl, imageUrl, DATE_FORMAT(l.createAt, "%Y-%m-%d") AS date
+  FROM LikeTB l
+  INNER JOIN Recommend r ON r.recomId = l.recomId
+  INNER JOIN Music M on r.musicId = M.musicId
+  WHERE weather IS NOT NULL AND weather IN ('light rain', 'moderate rain', 'light intensity drizzle rain','light intensity shower rain',
+                                           'heavy intensity rain','very heavy rain','extreme rain', 'freezing rain', 'shower drizzle', 
+                                            'shower rain', 'heavy intensity shower rain', 'ragged shower rain');
+      `;
+  const [existRow] = await connection.query(existQuery, num);
+  return existRow;
+}
+
+async function playlistWeather4(connection, num) {
+  const existQuery = `
+  SELECT r.musicId, feeling, musicName, singer, genre, youtubeUrl, imageUrl, DATE_FORMAT(l.createAt, "%Y-%m-%d") AS date
+  FROM LikeTB l
+  INNER JOIN Recommend r ON r.recomId = l.recomId
+  INNER JOIN Music M on r.musicId = M.musicId
+  WHERE weather IS NOT NULL AND weather IN ('light snow', 'Snow', 'Sleet', 'Light shower sleet', 'Light rain and snow', 'Light shower snow',
+                                           'Heavy snow', 'Shower sleet', 'Rain and snow', 'shower drizzle', 'Shower snow', 'Heavy shower snow');
+      `;
+  const [existRow] = await connection.query(existQuery, num);
+  return existRow;
+}
+
+async function playlistWeather5(connection, num) {
+  const existQuery = `
+  SELECT r.musicId, feeling, musicName, singer, genre, youtubeUrl, imageUrl, DATE_FORMAT(l.createAt, "%Y-%m-%d") AS date
+  FROM LikeTB l
+  INNER JOIN Recommend r ON r.recomId = l.recomId
+  INNER JOIN Music M on r.musicId = M.musicId
+  WHERE weather IS NOT NULL AND weather IN ('mist', 'Smoke', 'Haze', 'Light', 'sand/ dust whirls', 'fog', 'sand', 'dust',
+             'volcanic ash', 'squalls', 'tornado');
+      `;
+  const [existRow] = await connection.query(existQuery, num);
+  return existRow;
+}
+
+async function playlistWeather6(connection, num) {
+  const existQuery = `
+  SELECT r.musicId, feeling, musicName, singer, genre, youtubeUrl, imageUrl, DATE_FORMAT(l.createAt, "%Y-%m-%d") AS date
+  FROM LikeTB l
+  INNER JOIN Recommend r ON r.recomId = l.recomId
+  INNER JOIN Music M on r.musicId = M.musicId
+  WHERE weather IS NOT NULL AND weather IN ('clear sky');
+      `;
+  const [existRow] = await connection.query(existQuery, num);
+  return existRow;
+}
+
+async function playlistWeather7(connection, num) {
+  const existQuery = `
+  SELECT r.musicId, feeling, musicName, singer, genre, youtubeUrl, imageUrl, DATE_FORMAT(l.createAt, "%Y-%m-%d") AS date
+  FROM LikeTB l
+  INNER JOIN Recommend r ON r.recomId = l.recomId
+  INNER JOIN Music M on r.musicId = M.musicId
+  WHERE weather IS NOT NULL AND weather IN ('few clouds', 'scattered clouds','broken clouds', 'overcast clouds');
+      `;
+  const [existRow] = await connection.query(existQuery, num);
+  return existRow;
+}
+
+
+
 module.exports = {
   existFolder,
   getFolderStatus,
@@ -470,6 +565,13 @@ module.exports = {
   likeDelete,
   updateLike,
   existRecommendd,
-  playlistfeeling
+  playlistfeeling,
+  playlistWeather1,
+  playlistWeather2,
+  playlistWeather3,
+  playlistWeather4,
+  playlistWeather5,
+  playlistWeather6,
+  playlistWeather7
 
 };

@@ -535,3 +535,52 @@ exports.feelingPlaylist= async function (req, res) {
 
     return res.send(response({ "isSuccess": true, "code": 1000, "message": "기분별 플레이리스트 조회 성공" }, playlist ));
 };
+
+exports.feelingPlaylist2 = async function (req, res) {
+
+    const num = req.params.num;
+    if (!num) return res.send(errResponse(baseResponse.WEATHER_INDEX_EMPTY));
+    
+    var regExp = /^[0-9]+$/;
+    if(!regExp.test(num))
+        return res.send(response(baseResponse.INPUT_NUMBER));
+
+    if(num < 1 || num > 7)
+        return res.send(response(baseResponse.WEATHER_EXCEED));
+    if(num == 1){
+        const playlist = await musicProvider.retrievePlaylistWeather1(num);
+        if(playlist.length < 1)
+            return res.send(response(baseResponse.EMPTY_PLAYLIST1_RESULT));
+        return res.send(response({ "isSuccess": true, "code": 1000, "message": "날씨별 플레이리스트 조회 성공" }, playlist ));
+    } else if(num == 2){
+        const playlist = await musicProvider.retrievePlaylistWeather2(num);
+        if(playlist.length < 1)
+            return res.send(response(baseResponse.EMPTY_PLAYLIST1_RESULT));
+        return res.send(response({ "isSuccess": true, "code": 1000, "message": "날씨별 플레이리스트 조회 성공" }, playlist ));
+    } else if(num == 3){
+        const playlist = await musicProvider.retrievePlaylistWeather3(num);
+        if(playlist.length < 1)
+            return res.send(response(baseResponse.EMPTY_PLAYLIST1_RESULT));
+        return res.send(response({ "isSuccess": true, "code": 1000, "message": "날씨별 플레이리스트 조회 성공" }, playlist ));
+    } else if(num == 4){
+        const playlist = await musicProvider.retrievePlaylistWeather4(num);
+        if(playlist.length < 1)
+            return res.send(response(baseResponse.EMPTY_PLAYLIST1_RESULT));
+        return res.send(response({ "isSuccess": true, "code": 1000, "message": "날씨별 플레이리스트 조회 성공" }, playlist ));
+    } else if(num == 5){
+        const playlist = await musicProvider.retrievePlaylistWeather5(num);
+        if(playlist.length < 1)
+            return res.send(response(baseResponse.EMPTY_PLAYLIST1_RESULT));
+        return res.send(response({ "isSuccess": true, "code": 1000, "message": "날씨별 플레이리스트 조회 성공" }, playlist ));
+    } else if(num == 6){
+        const playlist = await musicProvider.retrievePlaylistWeather6(num);
+        if(playlist.length < 1)
+            return res.send(response(baseResponse.EMPTY_PLAYLIST1_RESULT));
+        return res.send(response({ "isSuccess": true, "code": 1000, "message": "날씨별 플레이리스트 조회 성공" }, playlist ));
+    } else if(num == 7){
+        const playlist = await musicProvider.retrievePlaylistWeather7(num);
+        if(playlist.length < 1)
+            return res.send(response(baseResponse.EMPTY_PLAYLIST1_RESULT));
+        return res.send(response({ "isSuccess": true, "code": 1000, "message": "날씨별 플레이리스트 조회 성공" }, playlist ));
+    } 
+};

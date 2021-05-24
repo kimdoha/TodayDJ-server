@@ -418,3 +418,60 @@ exports.retrievePlaylistFeeling = async function (num) {
 
   return playlistResult;
 };
+
+
+exports.retrievePlaylistWeather1 = async function (num) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const playlistResult = await musicDao.playlistWeather1(connection, num);
+  connection.release();
+
+  return playlistResult;
+};
+
+exports.retrievePlaylistWeather2 = async function (num) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const playlistResult = await musicDao.playlistWeather2(connection, num);
+  connection.release();
+
+  return playlistResult;
+};
+
+exports.retrievePlaylistWeather3 = async function (num) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const playlistResult = await musicDao.playlistWeather3(connection, num);
+  connection.release();
+
+  return playlistResult;
+};
+
+exports.retrievePlaylistWeather4 = async function (num) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const playlistResult = await musicDao.playlistWeather4(connection, num);
+  connection.release();
+
+  return playlistResult;
+};
+
+exports.retrievePlaylistWeather5 = async function (num) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const playlistResult = await musicDao.playlistWeather5(connection, num);
+  connection.release();
+
+  return playlistResult;
+};
+
+exports.retrievePlaylistWeather6 = async function (num) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const playlistResult = await musicDao.playlistWeather6(connection, num);
+  connection.release();
+
+  return playlistResult;
+};
+
+exports.retrievePlaylistWeather7 = async function (num) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const playlistResult = await musicDao.playlistWeather7(connection, num);
+  connection.release();
+
+  return playlistResult;
+};

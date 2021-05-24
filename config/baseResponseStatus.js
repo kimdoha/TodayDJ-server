@@ -51,6 +51,12 @@ module.exports = {
     NUM_FOLDER: { "isSuccess": false, "code": 2028, "message": "폴더아이디를 입력해주세요" },
     NUM_RECOMM: { "isSuccess": false, "code": 2029, "message": "추천노래 아이디를 입력해주세요" },
 
+    // weather
+    WEATHER_INDEX_EMPTY : { "isSuccess": false, "code": 2030, "message": "날씨 인덱스를 입력해주세요" },
+    WEATHER_EXCEED : { "isSuccess": false, "code": 2031, "message": "날씨 인덱스 범위를 벗어났습니다" },
+
+
+
     // Response error
     SIGNUP_REDUNDANT_EMAIL : { "isSuccess": false, "code": 3001, "message":"중복된 이메일입니다." },
     SIGNUP_REDUNDANT_NICKNAME : { "isSuccess": false, "code": 3002, "message":"중복된 닉네임입니다." },
@@ -75,7 +81,9 @@ module.exports = {
 
     // 기분 플레이리스트
     EMPTY_PLAYLIST1_RESULT : { "isSuccess": false, "code": 3012, "message": "해당 기분의 추천된 노래가 없습니다." },
-    
+    EMPTY_PLAYLIST2_RESULT : { "isSuccess": false, "code": 3013, "message": "해당 날씨의 추천된 노래가 없습니다." },
+   
+
     //Connection, Transaction 등의 서버 오류
     DB_ERROR : { "isSuccess": false, "code": 4000, "message": "데이터 베이스 에러"},
     SERVER_ERROR : { "isSuccess": false, "code": 4001, "message": "서버 에러"},
