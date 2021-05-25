@@ -435,8 +435,6 @@ exports.feelingMusics = async function (req, res) {
             setTimeout(function(){
                 return res.send(response({ "isSuccess": true, "code": 1000, "message": "[앵그리2]기분별 음악 조회 성공" }, feelingMusics ));
             }, 5000);
-
-        
         }
     }
 }

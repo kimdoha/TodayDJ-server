@@ -327,11 +327,11 @@ async function retrieveMusicList2(connection, year, mon, day) {
 
 async function getChart(connection, month) {
   const existQuery = `
-  SELECT (SELECT (ROUND(COUNT(*) / (SELECT COUNT(*) FROM Recommend WHERE weather IS NULL AND MONTH(createAt) = ?),2)) FROM Recommend
-  WHERE feeling = 1 AND MONTH(createAt) = ?) AS percentage1, (SELECT (ROUND(COUNT(*) / (SELECT COUNT(*) FROM Recommend WHERE weather IS NULL AND MONTH(createAt) = ?),2))  FROM Recommend
-  WHERE feeling = 2 AND MONTH(createAt) = ?) AS percentage2, (SELECT (ROUND(COUNT(*) / (SELECT COUNT(*) FROM Recommend WHERE weather IS NULL AND MONTH(createAt) = ?),2))  FROM Recommend
-  WHERE feeling = 3 AND MONTH(createAt) = ?) AS percentage3,(SELECT (ROUND(COUNT(*) / (SELECT COUNT(*) FROM Recommend WHERE weather IS NULL AND MONTH(createAt) = ?),2))  FROM Recommend
-  WHERE feeling = 4 AND MONTH(createAt) = ?) AS percentage4, (SELECT (ROUND(COUNT(*) / (SELECT COUNT(*) FROM Recommend WHERE weather IS NULL AND MONTH(createAt) = ?),2))  FROM Recommend
+  SELECT (SELECT IFNULL((ROUND(COUNT(*) / (SELECT COUNT(*) FROM Recommend WHERE weather IS NULL AND MONTH(createAt) = ?),2)),0) FROM Recommend
+  WHERE feeling = 1 AND MONTH(createAt) = ?) AS percentage1, (SELECT IFNULL((ROUND(COUNT(*) / (SELECT COUNT(*) FROM Recommend WHERE weather IS NULL AND MONTH(createAt) = ?),2)),0)  FROM Recommend
+  WHERE feeling = 2 AND MONTH(createAt) = ?) AS percentage2, (SELECT IFNULL((ROUND(COUNT(*) / (SELECT COUNT(*) FROM Recommend WHERE weather IS NULL AND MONTH(createAt) = ?),2)),0)  FROM Recommend
+  WHERE feeling = 3 AND MONTH(createAt) = ?) AS percentage3,(SELECT IFNULL((ROUND(COUNT(*) / (SELECT COUNT(*) FROM Recommend WHERE weather IS NULL AND MONTH(createAt) = ?),2)),0)  FROM Recommend
+  WHERE feeling = 4 AND MONTH(createAt) = ?) AS percentage4, (SELECT IFNULL((ROUND(COUNT(*) / (SELECT COUNT(*) FROM Recommend WHERE weather IS NULL AND MONTH(createAt) = ?),2)),0)  FROM Recommend
   WHERE feeling = 5 AND MONTH(createAt) = ?) AS percentage5;
     `;
   const [existRows] = await connection.query(existQuery, [month, month, month, month, month, month, month, month, month, month]);
