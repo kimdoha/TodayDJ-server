@@ -38,4 +38,7 @@ module.exports = function(app){
     // 12. 플레이리스트 정보조회 날씨별 필터
     app.get('/playlist/weather/:num',music.feelingPlaylist2);
 
+    //13. 플레이리스트
+    app.get('/playlist', music.totalPlaylist);
+
 };

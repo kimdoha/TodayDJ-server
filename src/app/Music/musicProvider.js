@@ -3,24 +3,6 @@ const { logger } = require("../../../config/winston");
 const musicService = require("./musicService");
 const musicDao = require("./musicDao");
 
-// Provider: Read 비즈니스 로직 처리
-
-// exports.retrieveUserList = async function (email) {
-//   if (!email) {
-//     const connection = await pool.getConnection(async (conn) => conn);
-//     const userListResult = await userDao.selectUser(connection);
-//     connection.release();
-
-//     return userListResult;
-
-//   } else {
-//     const connection = await pool.getConnection(async (conn) => conn);
-//     const userListResult = await userDao.selectUserEmail(connection, email);
-//     connection.release();
-
-//     return userListResult;
-//   }
-// };
 
 exports.existFolder = async function (folderId) {
   const connection = await pool.getConnection(async (conn) => conn);
@@ -471,6 +453,14 @@ exports.retrievePlaylistWeather6 = async function (num) {
 exports.retrievePlaylistWeather7 = async function (num) {
   const connection = await pool.getConnection(async (conn) => conn);
   const playlistResult = await musicDao.playlistWeather7(connection, num);
+  connection.release();
+
+  return playlistResult;
+};
+
+exports.retrievePlaylistTotal = async function () {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const playlistResult = await musicDao.playlistTotal(connection);
   connection.release();
 
   return playlistResult;

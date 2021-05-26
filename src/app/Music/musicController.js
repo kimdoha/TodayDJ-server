@@ -7,43 +7,6 @@ const {response, errResponse} = require("../../../config/response");
 const regexEmail = require("regex-email");
 const {emit} = require("nodemon");
 
-
-// /**
-//  * API No. 11
-//  * API Name : 개인정보 설정 저장 API
-//  * [POST] /user
-//  */
-// exports.postUsers = async function (req, res) {
-
-//     /**
-//      * Body: email, password, nickname
-//      */
-//     const {email, password, nickname} = req.body;
-
-//     // 빈 값 체크
-//     if (!email)
-//         return res.send(response(baseResponse.SIGNUP_EMAIL_EMPTY));
-
-//     // 길이 체크
-//     if (email.length > 30)
-//         return res.send(response(baseResponse.SIGNUP_EMAIL_LENGTH));
-
-//     // 형식 체크 (by 정규표현식)
-//     if (!regexEmail.test(email))
-//         return res.send(response(baseResponse.SIGNUP_EMAIL_ERROR_TYPE));
-
-//     // 기타 등등 - 추가하기
-
-
-//     const signUpResponse = await userService.createUser(
-//         email,
-//         password,
-//         nickname
-//     );
-
-//     return res.send(signUpResponse);
-// };
-
 /**
  * API No. 1
  * API Name : 날씨 조회 API
@@ -581,4 +544,15 @@ exports.feelingPlaylist2 = async function (req, res) {
             return res.send(response(baseResponse.EMPTY_PLAYLIST1_RESULT));
         return res.send(response({ "isSuccess": true, "code": 1000, "message": "날씨별 플레이리스트 조회 성공" }, playlist ));
     } 
+};
+
+
+exports.totalPlaylist= async function (req, res) {
+
+
+    const playlist = await musicProvider.retrievePlaylistTotal();
+    if(playlist.length< 1)
+        return res.send(response(baseResponse.EMPTY_PLAYLIST_RESULT));
+
+    return res.send(response({ "isSuccess": true, "code": 1000, "message": "전체 플레이리스트 조회 성공" }, playlist ));
 };

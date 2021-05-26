@@ -518,6 +518,16 @@ async function playlistWeather7(connection, num) {
   return existRow;
 }
 
+async function playlistTotal(connection) {
+  const existQuery = `
+  SELECT r.musicId, musicName, singer, genre, youtubeUrl, imageUrl, DATE_FORMAT(l.createAt, "%Y-%m-%d") AS date
+  FROM LikeTB l
+  INNER JOIN Recommend r ON r.recomId = l.recomId
+  INNER JOIN Music M on r.musicId = M.musicId;
+      `;
+  const [existRow] = await connection.query(existQuery);
+  return existRow;
+}
 
 
 module.exports = {
@@ -572,6 +582,7 @@ module.exports = {
   playlistWeather4,
   playlistWeather5,
   playlistWeather6,
-  playlistWeather7
+  playlistWeather7,
+  playlistTotal
 
 };
