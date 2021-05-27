@@ -129,7 +129,7 @@ exports.retrieveAngryType = async function () {
 
 exports.retrieveFeelingMusic5 = async function () {
   const connection = await pool.getConnection(async (conn) => conn);
-  const feelingResult = await musicDao.retrieveFeelingMusics5(connection);
+  const feelingResult = await musicDao.retrieveFeelingMusic5(connection);
 
   connection.release();
 
