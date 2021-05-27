@@ -14,12 +14,8 @@ module.exports = function () {
     app.use(methodOverride());
 
     app.use(cors());
-    // app.use(express.static(process.cwd() + '/public'));
 
-    /* App (Android, iOS) */
-    // TODO: 도메인을 추가할 경우 이곳에 Route를 추가하세요.
     require('../src/app/Music/musicRoute')(app);
-    // require('../src/app/Board/boardRoute')(app);
-
+    
     return app;
 };

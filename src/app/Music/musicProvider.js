@@ -302,7 +302,9 @@ exports.retrieveYoutubeUrl2 = async function (feelingMusics) {
 });
     setTimeout(async function(){
        //console.log(weatherMusics);
-       await musicService.updateYoutubeInfo(musicId, youTubeUrl, thumbnailsImage);
+        if(youtubeUrl !== 'https://www.youtube.com/watch?v=' && thumbnailsImage === ""){
+          await musicService.updateYoutubeInfo(musicId, youTubeUrl, thumbnailsImage);
+        } 
        connection.release();
        return feelingMusics;
     

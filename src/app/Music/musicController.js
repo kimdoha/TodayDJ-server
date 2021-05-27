@@ -98,46 +98,6 @@ exports.getWeather = async function (req, res) {
 //     return res.send(response(baseResponse.SUCCESS, userByUserId));
 // };
 
-/**
- * API No. 9
- * API Name : 플레이리스트 폴더 생성 및 삭제 API
- * [POST] /playlist
- */
-exports.setFolder = async function (req, res) {
-    var { folderId , folderName } = req.body;
-
-
-    if(!folderId)
-        return res.send(response(baseResponse.FOLDER_ID_EMPTY ));
-    if(!folderName)
-        return res.send(response(baseResponse.FOLDER_NAME_EMPTY ));
-
-    // 숫자 형식 체크
-    var regExp = /^[0-9]+$/;
-    if(!regExp.test(folderId))
-        return res.send(response(baseResponse.INPUT_NUMBER));
-    
-    // 폴더이름 제한 (3-20)
-    var regExp = /^[가-힣a-zA-Z]{2,20}$/;
-    if(!regExp.test(folderName))
-        return res.send(response(baseResponse.SET_FOLDER_NAME));
-    
-    const [checkStatus] = await musicProvider.existFolder(folderId);
-    const [folderStatus] = await musicProvider.folderStatus(folderId);
-
-    if (checkStatus.exist == 0) {
-        const addFolder = await musicService.setFolder(folderId, folderName);
-        return res.send(addFolder);
-    } else {
-        if (folderStatus.status == 1) {
-            const updateFolderDelete = await musicService.deleteFolder(folderId, folderName);
-            return res.send(updateFolderDelete);
-        } else {
-            const updateFolderAdd = await musicService.updateFolder(folderId, folderName);
-            return res.send(updateFolderAdd);
-        }
-    }
-};
 
 /**
  * API No. 4
@@ -460,7 +420,7 @@ exports.postLike = async function (req, res) {
     const recomStatus = await musicProvider.existRecommend(recomId);
     if(recomStatus.length < 1)
         return res.send(response(baseResponse.PLAYLIST_RESULT));
-
+    
     const [checkStatus] = await musicProvider.existPlaylist(recomId);
     const [likeStatus] = await musicProvider.likeStatus(recomId);
 
@@ -511,7 +471,8 @@ exports.feelingPlaylist2 = async function (req, res) {
     if(num == 1){
         const playlist = await musicProvider.retrievePlaylistWeather1(num);
         if(playlist.length < 1)
-            return res.send(response(baseResponse.EMPTY_PLAYLIST1_RESULT));
+            return res.send(response(baseResponse.EMPTY_PLAYLIST2_RESULT));
+            
         return res.send(response({ "isSuccess": true, "code": 1000, "message": "날씨별 플레이리스트 조회 성공" }, playlist ));
     } else if(num == 2){
         const playlist = await musicProvider.retrievePlaylistWeather2(num);
