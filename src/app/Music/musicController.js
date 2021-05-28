@@ -80,24 +80,6 @@ exports.getWeather = async function (req, res) {
 
 };
 
-/**
- * API No. 3
- * API Name : 특정 유저 조회 API
- * [GET] /app/users/{userId}
- */
-// exports.getUserById = async function (req, res) {
-
-//     /**
-//      * Path Variable: userId
-//      */
-//     const userId = req.params.userId;
-
-//     if (!userId) return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
-
-//     const userByUserId = await userProvider.retrieveUser(userId);
-//     return res.send(response(baseResponse.SUCCESS, userByUserId));
-// };
-
 
 /**
  * API No. 4
@@ -407,19 +389,20 @@ exports.getTotalChart = async function (req, res) {
 // 플레이리스트 좋아요
 // playlist/like/:recomId
 exports.postLike = async function (req, res) {
-    const recomId = req.params.recomId;
-
-    if(!recomId)
+    const musicId = req.params.musicId;
+    var recomId;
+    if(!musicId)
         return res.send(response(baseResponse.NUM_RECOMM));
 
     // 숫자 형식 체크
     var regExp = /^[0-9]+$/;
-    if(!regExp.test(recomId))
+    if(!regExp.test(musicId))
         return res.send(response(baseResponse.INPUT_NUMBER));
     
-    const recomStatus = await musicProvider.existRecommend(recomId);
-    if(recomStatus.length < 1)
-        return res.send(response(baseResponse.PLAYLIST_RESULT));
+    const musicStatus = await musicProvider.existRecommend(musicId);
+    if(musicStatus == undefined || !musicStatus)
+        return res.send(response(baseResponse.RECOMMENDID_RESULT));
+    recomId = musicStatus.recomId;
     
     const [checkStatus] = await musicProvider.existPlaylist(recomId);
     const [likeStatus] = await musicProvider.likeStatus(recomId);
@@ -509,11 +492,10 @@ exports.feelingPlaylist2 = async function (req, res) {
 
 
 exports.totalPlaylist= async function (req, res) {
-
-
     const playlist = await musicProvider.retrievePlaylistTotal();
     if(playlist.length< 1)
         return res.send(response(baseResponse.EMPTY_PLAYLIST_RESULT));
 
     return res.send(response({ "isSuccess": true, "code": 1000, "message": "전체 플레이리스트 조회 성공" }, playlist ));
 };
+

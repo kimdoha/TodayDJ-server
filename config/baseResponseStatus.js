@@ -17,7 +17,7 @@ module.exports = {
     WEATHER_INDEX_EMPTY : { "isSuccess": false, "code": 2030, "message": "날씨 인덱스를 입력해주세요" },
     WEATHER_EXCEED : { "isSuccess": false, "code": 2031, "message": "날씨 인덱스 범위를 벗어났습니다" },
 
-
+    
 
     // Response error
     SIGNUP_REDUNDANT_EMAIL : { "isSuccess": false, "code": 3001, "message":"중복된 이메일입니다." },
@@ -46,6 +46,8 @@ module.exports = {
     EMPTY_PLAYLIST2_RESULT : { "isSuccess": false, "code": 3013, "message": "해당 날씨의 추천된 노래가 없습니다." },
     EMPTY_PLAYLIST_RESULT : { "isSuccess": false, "code": 3014, "message": "좋아요 누른 노래가 없습니다." },
 
+    // youtube
+    RECOMMENDID_RESULT : { "isSuccess": false, "code": 3015, "message": "musicId로 추천 노래가 없습니다." },
     DB_ERROR : { "isSuccess": false, "code": 4000, "message": "데이터 베이스 에러"},
     SERVER_ERROR : { "isSuccess": false, "code": 4001, "message": "서버 에러"},
  

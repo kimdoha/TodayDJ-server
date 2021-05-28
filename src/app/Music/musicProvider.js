@@ -2,6 +2,7 @@ const { pool } = require("../../../config/database");
 const { logger } = require("../../../config/winston");
 const musicService = require("./musicService");
 const musicDao = require("./musicDao");
+const baseResponseStatus = require("../../../config/baseResponseStatus");
 
 
 exports.existFolder = async function (folderId) {
@@ -305,6 +306,7 @@ exports.retrieveYoutubeUrl2 = async function (feelingMusics) {
         if(youtubeUrl !== 'https://www.youtube.com/watch?v=' && thumbnailsImage === ""){
           await musicService.updateYoutubeInfo(musicId, youTubeUrl, thumbnailsImage);
         } 
+        
        connection.release();
        return feelingMusics;
     
@@ -386,9 +388,9 @@ exports.likeStatus = async function (recomId) {
   return statusResult;
 };
 
-exports.existRecommend = async function (recomId) {
+exports.existRecommend = async function (musicId) {
   const connection = await pool.getConnection(async (conn) => conn);
-  const statusResult = await musicDao.existRecommendd(connection, recomId);
+  const [statusResult] = await musicDao.existRecommendd(connection, musicId);
   connection.release();
 
   return statusResult;

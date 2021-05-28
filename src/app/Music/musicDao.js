@@ -401,15 +401,15 @@ async function updateLike(connection, recomId) {
   return folderRow;
 }
 
-async function existRecommendd(connection, recomId) {
+async function existRecommendd(connection, musicId) {
   const existQuery = `
-      SELECT *
-      FROM Recommend r
-      INNER JOIN Music m ON m.musicId = r.musicId
-      WHERE imageUrl IS NOT NULL AND youtubeUrl IS NOT NULL
-        AND recomId = ?;
+  SELECT recomId
+  FROM Recommend r
+  INNER JOIN Music m ON m.musicId = r.musicId
+  WHERE imageUrl IS NOT NULL AND youtubeUrl IS NOT NULL
+  AND m.musicId = ?;
       `;
-  const [existRow] = await connection.query(existQuery, recomId);
+  const [existRow] = await connection.query(existQuery, musicId);
   return existRow;
 }
 
