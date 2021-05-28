@@ -3,6 +3,7 @@ const { logger } = require("../../../config/winston");
 const musicService = require("./musicService");
 const musicDao = require("./musicDao");
 const baseResponseStatus = require("../../../config/baseResponseStatus");
+const { response } = require("../../../config/response");
 
 
 exports.existFolder = async function (folderId) {
@@ -206,8 +207,8 @@ exports.retrieveYoutubeUrl = async function (weatherMusics) {
           //console.log(JSON.stringify(result, null, 2));
           //console.log(result);
           var resultjson = result.items[0];
-          console.log(resultjson.snippet.thumbnails.high.url);
-          console.log(resultjson.id.videoId);
+          //console.log(resultjson.snippet.thumbnails.high.url);
+          //console.log(resultjson.id.videoId);
           if(resultjson.snippet.thumbnails.high.url){
               thumbnailsImage = resultjson.snippet.thumbnails.high.url;
           } else {
@@ -230,11 +231,14 @@ exports.retrieveYoutubeUrl = async function (weatherMusics) {
     //await musicService.updateYoutubeInfo(musicId, youTubeUrl, thumbnailsImage);
     
     setTimeout(async function(){
-       //console.log(weatherMusics);
-       //console.log("youTubeUrl", youTubeUrl, "Thunbnail", thumbnailsImage);
-       await musicService.updateYoutubeInfo(musicId, youTubeUrl, thumbnailsImage);
-       connection.release();
-       return weatherMusics;
+       try {
+        await musicService.updateYoutubeInfo(musicId, youTubeUrl, thumbnailsImage);
+        connection.release();
+        return weatherMusics;
+
+      } catch (error) {
+          console.error(error);
+     }
     
     }, 3000);
 }
@@ -283,8 +287,8 @@ exports.retrieveYoutubeUrl2 = async function (feelingMusics) {
   else {
       //console.log(JSON.stringify(result, null, 2));
       var resultjson = result.items[0];
-      console.log(resultjson.snippet.thumbnails.high.url);
-      console.log(resultjson.id.videoId);
+      //console.log(resultjson.snippet.thumbnails.high.url);
+      //console.log(resultjson.id.videoId);
       if(resultjson.snippet.thumbnails.high.url){
           thumbnailsImage = resultjson.snippet.thumbnails.high.url;
       } else {
@@ -303,13 +307,16 @@ exports.retrieveYoutubeUrl2 = async function (feelingMusics) {
 });
     setTimeout(async function(){
        //console.log(weatherMusics);
-        if(youtubeUrl !== 'https://www.youtube.com/watch?v=' && thumbnailsImage === ""){
+       try {
+
           await musicService.updateYoutubeInfo(musicId, youTubeUrl, thumbnailsImage);
-        } 
-        
-       connection.release();
-       return feelingMusics;
-    
+          connection.release();
+          return feelingMusics;
+
+        } catch (error) {
+            console.error(error);
+       }
+
     }, 3000);
 }
 

@@ -6,6 +6,7 @@ const {response, errResponse} = require("../../../config/response");
 
 const regexEmail = require("regex-email");
 const {emit} = require("nodemon");
+const { json } = require("express");
 
 /**
  * API No. 1
@@ -188,8 +189,12 @@ exports.weatherMusics = async function (req, res) {
     //await musicService.setYoutubeUrl(weatherMusics);
     await musicProvider.settingRecommend(type, weath, weatherMusics);
     
+    
 
     setTimeout(function(){
+        if(weatherMusics.youtubeUrl === "https://www.youtube.com/watch?v=" || !weatherMusics.imageUrl || !weatherMusics.youtubeUrl)
+            return res.send(response(baseResponse.YOUTUBE_RESULT));
+    
         return res.send(response({ "isSuccess": true, "code": 1000, "message": "날씨별 음악 조회 성공" }, weatherMusics ));
     }, 5000);
    
@@ -250,12 +255,15 @@ exports.feelingMusics = async function (req, res) {
         console.log(feelingMusics[0].singer);
 
     await musicProvider.retrieveYoutubeUrl2(feelingMusics);
+
     var type = 1;
     var feel = feeling.feeling;
     await musicProvider.settingRecommend2(type, feel, feelingMusics);
     
 
     setTimeout(function(){
+        if(feelingMusics[0].youtubeUrl === "https://www.youtube.com/watch?v=" || !feelingMusics[0].imageUrl)
+            return res.send(response(baseResponse.YOUTUBE_RESULT));
         return res.send(response({ "isSuccess": true, "code": 1000, "message": "[익사이팅, 해피]기분별 음악 조회 성공" }, feelingMusics ));
     }, 5000);
 
@@ -275,7 +283,10 @@ exports.feelingMusics = async function (req, res) {
     
 
     setTimeout(function(){
+        if(feelingMusics[0].youtubeUrl === "https://www.youtube.com/watch?v=" || !feelingMusics[0].imageUrl)
+            return res.send(response(baseResponse.YOUTUBE_RESULT));
         return res.send(response({ "isSuccess": true, "code": 1000, "message": "[쏘쏘]기분별 음악 조회 성공" }, feelingMusics ));
+        
     }, 5000);
       
     } else if(feeling.feeling === 4){
@@ -291,7 +302,10 @@ exports.feelingMusics = async function (req, res) {
             
         
             setTimeout(function(){
+                if(feelingMusics[0].youtubeUrl === "https://www.youtube.com/watch?v=" || !feelingMusics[0].imageUrl)
+                    return res.send(response(baseResponse.YOUTUBE_RESULT));
                 return res.send(response({ "isSuccess": true, "code": 1000, "message": "[새드1]기분별 음악 조회 성공" }, feelingMusics ));
+                
             }, 5000);
 
         } else if(usertype.sadType1 === 2){
@@ -304,7 +318,10 @@ exports.feelingMusics = async function (req, res) {
             
         
             setTimeout(function(){
+                if(feelingMusics[0].youtubeUrl === "https://www.youtube.com/watch?v=" || !feelingMusics[0].imageUrl)
+                    return res.send(response(baseResponse.YOUTUBE_RESULT));
                 return res.send(response({ "isSuccess": true, "code": 1000, "message": "[새드2]기분별 음악 조회 성공" }, feelingMusics ));
+                
             }, 5000);
         
         }
@@ -323,7 +340,10 @@ exports.feelingMusics = async function (req, res) {
             
         
             setTimeout(function(){
+                if(feelingMusics[0].youtubeUrl === "https://www.youtube.com/watch?v=" || !feelingMusics[0].imageUrl)
+                    return res.send(response(baseResponse.YOUTUBE_RESULT));
                 return res.send(response({ "isSuccess": true, "code": 1000, "message": "[앵그리1]기분별 음악 조회 성공" }, feelingMusics ));
+                
             }, 5000);
         
         
@@ -338,7 +358,10 @@ exports.feelingMusics = async function (req, res) {
             
         
             setTimeout(function(){
+                if(feelingMusics[0].youtubeUrl === "https://www.youtube.com/watch?v=" || !feelingMusics[0].imageUrl)
+                    return res.send(response(baseResponse.YOUTUBE_RESULT));
                 return res.send(response({ "isSuccess": true, "code": 1000, "message": "[앵그리2]기분별 음악 조회 성공" }, feelingMusics ));
+                
             }, 5000);
         }
     }
@@ -400,7 +423,8 @@ exports.postLike = async function (req, res) {
         return res.send(response(baseResponse.INPUT_NUMBER));
     
     const musicStatus = await musicProvider.existRecommend(musicId);
-    if(musicStatus == undefined || !musicStatus)
+    console.log(musicStatus);
+    if(!musicStatus)
         return res.send(response(baseResponse.RECOMMENDID_RESULT));
     recomId = musicStatus.recomId;
     

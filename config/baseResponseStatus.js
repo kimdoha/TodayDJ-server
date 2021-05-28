@@ -48,6 +48,7 @@ module.exports = {
 
     // youtube
     RECOMMENDID_RESULT : { "isSuccess": false, "code": 3015, "message": "musicId로 추천 노래가 없습니다." },
+    YOUTUBE_RESULT : { "isSuccess": false, "code": 3016, "message": "YOUTUBE 정보를 불러 올 수 없습니다." },
     DB_ERROR : { "isSuccess": false, "code": 4000, "message": "데이터 베이스 에러"},
     SERVER_ERROR : { "isSuccess": false, "code": 4001, "message": "서버 에러"},
  
