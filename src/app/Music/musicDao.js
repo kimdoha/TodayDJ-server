@@ -419,7 +419,7 @@ async function playlistfeeling(connection, num) {
   FROM LikeTB l
   INNER JOIN Recommend r ON r.recomId = l.recomId
   INNER JOIN Music M on r.musicId = M.musicId
-  WHERE feeling IS NOT NULL AND feeling = ?;
+  WHERE feeling IS NOT NULL AND feeling = ?  AND l.status = 1;
       `;
   const [existRow] = await connection.query(existQuery, num);
   return existRow;
@@ -435,7 +435,7 @@ async function playlistWeather1(connection, num) {
   WHERE weather IS NOT NULL AND weather IN ('thunderstorm with light rain', 'thunderstorm with rain',
                                             'light thunderstorm', 'thunderstorm with heavy rain','thunderstorm','heavy thunderstorm',
                                             'ragged thunderstorm', 'thunderstorm with light drizzle', 'thunderstorm with drizzle',
-                                            'thunderstorm with heavy drizzle');
+                                            'thunderstorm with heavy drizzle')  AND l.status = 1;
       `;
   const [existRow] = await connection.query(existQuery, num);
   return existRow;
@@ -448,7 +448,7 @@ async function playlistWeather2(connection, num) {
   INNER JOIN Recommend r ON r.recomId = l.recomId
   INNER JOIN Music M on r.musicId = M.musicId
   WHERE weather IS NOT NULL AND weather IN ('light intensity drizzle', 'drizzle', 'light intensity drizzle rain','drizzle rain',
-               'heavy intensity drizzle','heavy intensity drizzle rain','shower rain and drizzle', 'heavy shower rain and drizzle', 'shower drizzle');
+               'heavy intensity drizzle','heavy intensity drizzle rain','shower rain and drizzle', 'heavy shower rain and drizzle', 'shower drizzle')  AND l.status = 1;
       `;
   const [existRow] = await connection.query(existQuery, num);
   return existRow;
@@ -462,7 +462,7 @@ async function playlistWeather3(connection, num) {
   INNER JOIN Music M on r.musicId = M.musicId
   WHERE weather IS NOT NULL AND weather IN ('light rain', 'moderate rain', 'light intensity drizzle rain','light intensity shower rain',
                                            'heavy intensity rain','very heavy rain','extreme rain', 'freezing rain', 'shower drizzle', 
-                                            'shower rain', 'heavy intensity shower rain', 'ragged shower rain');
+                                            'shower rain', 'heavy intensity shower rain', 'ragged shower rain')  AND l.status = 1;
       `;
   const [existRow] = await connection.query(existQuery, num);
   return existRow;
@@ -475,7 +475,7 @@ async function playlistWeather4(connection, num) {
   INNER JOIN Recommend r ON r.recomId = l.recomId
   INNER JOIN Music M on r.musicId = M.musicId
   WHERE weather IS NOT NULL AND weather IN ('light snow', 'Snow', 'Sleet', 'Light shower sleet', 'Light rain and snow', 'Light shower snow',
-                                           'Heavy snow', 'Shower sleet', 'Rain and snow', 'shower drizzle', 'Shower snow', 'Heavy shower snow');
+                                           'Heavy snow', 'Shower sleet', 'Rain and snow', 'shower drizzle', 'Shower snow', 'Heavy shower snow')  AND l.status = 1;
       `;
   const [existRow] = await connection.query(existQuery, num);
   return existRow;
@@ -488,7 +488,7 @@ async function playlistWeather5(connection, num) {
   INNER JOIN Recommend r ON r.recomId = l.recomId
   INNER JOIN Music M on r.musicId = M.musicId
   WHERE weather IS NOT NULL AND weather IN ('mist', 'Smoke', 'Haze', 'Light', 'sand/ dust whirls', 'fog', 'sand', 'dust',
-             'volcanic ash', 'squalls', 'tornado');
+             'volcanic ash', 'squalls', 'tornado')  AND l.status = 1;
       `;
   const [existRow] = await connection.query(existQuery, num);
   return existRow;
@@ -500,7 +500,7 @@ async function playlistWeather6(connection, num) {
   FROM LikeTB l
   INNER JOIN Recommend r ON r.recomId = l.recomId
   INNER JOIN Music M on r.musicId = M.musicId
-  WHERE weather IS NOT NULL AND weather IN ('clear sky');
+  WHERE weather IS NOT NULL AND weather IN ('clear sky')  AND l.status = 1;
       `;
   const [existRow] = await connection.query(existQuery, num);
   return existRow;
@@ -512,7 +512,7 @@ async function playlistWeather7(connection, num) {
   FROM LikeTB l
   INNER JOIN Recommend r ON r.recomId = l.recomId
   INNER JOIN Music M on r.musicId = M.musicId
-  WHERE weather IS NOT NULL AND weather IN ('few clouds', 'scattered clouds','broken clouds', 'overcast clouds');
+  WHERE weather IS NOT NULL AND weather IN ('few clouds', 'scattered clouds','broken clouds', 'overcast clouds') AND l.status = 1;
       `;
   const [existRow] = await connection.query(existQuery, num);
   return existRow;
