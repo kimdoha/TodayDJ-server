@@ -21,6 +21,22 @@ exports.getWeather = async function (req, res) {
 
       });
 
+    // var ipapi = require('ipapi.co');
+    // var latt, lngg;
+    // var callback1 = function(res){
+    //     //console.log(res);
+    //     latt = res;  
+    // };
+    // var callback2 = function(res){
+    //     //console.log(res);
+    //     lngg = res;  
+    // };
+
+    // // console.log(ipapi.location(callback));
+    // ipapi.location(callback1, '', '', 'latitude');
+    // ipapi.location(callback2, '', '', 'longitude')
+
+
       const OpenWeatherMapHelper = require("openweathermap-node");
       const helper = new OpenWeatherMapHelper(
           {
@@ -32,14 +48,15 @@ exports.getWeather = async function (req, res) {
       
     // Configure API parameters
     const params = {
-    wifiAccessPoints: [
-        {
-        macAddress: '01:23:45:67:89:AB',
-        signalStrength: -65,
-        signalToNoiseRatio: 40
-        }
-    ]
-    };
+        wifiAccessPoints: [
+            {
+            macAddress: '1e:76:54:08:00:04',
+            signalStrength: -65,
+            signalToNoiseRatio: 40
+            }
+        ]
+        };
+
     var weatherName, area, currentData;
 
     // Get data
@@ -48,18 +65,17 @@ exports.getWeather = async function (req, res) {
         console.log (err);
         return;
     }
-        console.log (data);
+
         lat = data.location.lat;
         lng = data.location.lng;
-        console.log(lat, lng);
-        
+
         helper.getCurrentWeatherByGeoCoordinates(lat, lng, (err, currentWeather) => {
             if(err){
                 console.log(err);
                 return res.send(response(baseResponse.EMPTY_WEATHER_RESULT));
             }
             else{
-                console.log(currentWeather);
+                console.log(lat, lng);
                 weatherName = currentWeather.weather[0].description;
                 area = currentWeather.name;
                 weather = async function (req, res) {
@@ -76,11 +92,11 @@ exports.getWeather = async function (req, res) {
                     }
                 }
                 weather();
+                
                 return res.send(response({ "isSuccess": true, "code": 1000, "message":"날씨 조회 성공" }, currentWeather));
             }
         });
     });
-
 };
 
 
