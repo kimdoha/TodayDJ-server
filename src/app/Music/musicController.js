@@ -16,8 +16,9 @@ const { json } = require("express");
 exports.getWeather = async function (req, res) {
 
     const geolocation = require ('google-geolocation') ({
-        key: 'AIzaSyABr_zvB4ZRyLUHUB1DHx-RvNxPs9Gp4yI',
+        key: 'AIzaSyCONq4eoFv--fhsmf2C-gnbSdunHyStpSw',
         timeout: 2000
+
       });
 
       const OpenWeatherMapHelper = require("openweathermap-node");
