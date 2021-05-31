@@ -523,7 +523,8 @@ async function playlistTotal(connection) {
   SELECT r.musicId, musicName, singer, genre, youtubeUrl, imageUrl, DATE_FORMAT(l.createAt, "%Y-%m-%d") AS date
   FROM LikeTB l
   INNER JOIN Recommend r ON r.recomId = l.recomId
-  INNER JOIN Music M on r.musicId = M.musicId;
+  INNER JOIN Music M on r.musicId = M.musicId
+  WHERE l.status = 1;
       `;
   const [existRow] = await connection.query(existQuery);
   return existRow;
