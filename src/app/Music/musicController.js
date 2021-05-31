@@ -51,7 +51,8 @@ exports.getWeather = async function (req, res) {
         console.log (data);
         lat = data.location.lat;
         lng = data.location.lng;
-
+        console.log(lat, lng);
+        
         helper.getCurrentWeatherByGeoCoordinates(lat, lng, (err, currentWeather) => {
             if(err){
                 console.log(err);
