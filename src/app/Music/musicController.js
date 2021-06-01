@@ -6,35 +6,149 @@ const {response, errResponse} = require("../../../config/response");
 
 const regexEmail = require("regex-email");
 const { emit } = require("nodemon");
-const json = require("express");
+const {json} = require("express");
 
 /**
  * API No. 1
  * API Name : 날씨 조회 API
  * [GET] /weather
  */
+// // exports.getWeather = async function (req, res) {
+
+// //     const geolocation = require ('google-geolocation') ({
+// //         key: 'AIzaSyCONq4eoFv--fhsmf2C-gnbSdunHyStpSw',
+// //         timeout: 2000
+
+// //       });
+
+//     // var ipapi = require('ipapi.co');
+//     // var latt, lngg;
+//     // var callback1 = function(res){
+//     //     //console.log(res);
+//     //     latt = res;  
+//     // };
+//     // var callback2 = function(res){
+//     //     //console.log(res);
+//     // };
+
+//     // // // console.log(ipapi.location(callback));
+//     // ipapi.location(callback1, '', '', 'latitude');
+//     // ipapi.location(callback2, '', '', 'longitude')
+
+
+//       const OpenWeatherMapHelper = require("openweathermap-node");
+//       const helper = new OpenWeatherMapHelper(
+//           {
+//               APPID: 'a4946aacf5e9e85273a8c53542d131b3',
+//               units: "imperial"
+//           }
+//       );
+  
+      
+//     // Configure API parameters
+//     const params = {
+//         wifiAccessPoints: [
+//             {
+//             macAddress: '1e:76:54:08:00:04',
+//             signalStrength: -65,
+//             signalToNoiseRatio: 40
+//             }
+//         ]
+//         };
+
+//     var weatherName, area, currentData;
+//     var result;
+//     // Get data
+//     geolocation (params, (err, data) => {
+//     if (err) {
+//         console.log (err);
+//         return;
+//     }
+
+//         lat = data.location.lat;
+//         lng = data.location.lng;
+//         var ipapi = require('ipapi.co');
+//         var s1 = "";
+//         var s2 = "";
+
+//         var callback = function(res){
+//             console.log(res.latitude, res.longitude);
+//             lat = res.latitude;
+//             lng = res.longitude;
+            
+//             helper.getCurrentWeatherByGeoCoordinates(lat, lng,  (err, res2) => {
+//                 if(err){
+//                     console.log(err);
+//                     return res.send(response(baseResponse.EMPTY_WEATHER_RESULT));
+//                 }
+//                 else{
+//                     try {
+                        
+//                     console.log(lat, lng);
+//                     weatherName = res2.weather[0].description;
+//                     area = res2.name;
+//                     weather = async function () {
+//                         try {
+//                             const [checkStatus] = await musicProvider.existWeather();
+//                             console.log(checkStatus);
+   
+
+//                         // 오늘의 날씨 저장된게 없으면 -------수정
+//                         if (checkStatus.exist == 0) {
+//                             try {
+//                                 const addWeather = await musicService.setWeather( weatherName, area);
+//                                 console.log("날씨 저장 성공");
+//                                 console.log("res1 >>>", res2);
+//                                 return res2;
+                         
+//                             } catch (error) {
+//                                 console.log("error2", error);
+//                             }
+                            
+//                         } else {
+//                             try {
+//                                 const updateWeather = await musicService.updateWeather(weatherName, area);
+//                                 console.log("날씨 업뎃 성공");
+//                                 console.log("res2 >>>", res2);
+//                                 return res2;
+
+//                             } catch (error) {
+//                                 console.log("error3", error);
+//                             }
+//                         }
+
+//                     } catch (error) {
+//                         console.log("error1", error);
+//                     }
+//                 }
+                
+//                 // return res.send(response({ "isSuccess": true, "code": 1000, "message":"날씨 조회 성공" , currentData)); 
+            
+   
+//                 result = weather();
+//                 } catch (error) {
+//                     console.log("error5", error);
+//                 }
+
+    
+//             }});
+            
+                
+//             setTimeout(function(){
+//                 return res.send(JSON.stringify({ "isSuccess": true, "code": 1000, "message": "날씨 조회 성공" }, result ));
+//             }, 5000);
+//         };
+//         ipapi.location(callback);
+           
+//     });
+// };
+
 exports.getWeather = async function (req, res) {
 
     const geolocation = require ('google-geolocation') ({
         key: 'AIzaSyCONq4eoFv--fhsmf2C-gnbSdunHyStpSw',
         timeout: 2000
-
       });
-
-    // var ipapi = require('ipapi.co');
-    // var latt, lngg;
-    // var callback1 = function(res){
-    //     //console.log(res);
-    //     latt = res;  
-    // };
-    // var callback2 = function(res){
-    //     //console.log(res);
-    // };
-
-    // // // console.log(ipapi.location(callback));
-    // ipapi.location(callback1, '', '', 'latitude');
-    // ipapi.location(callback2, '', '', 'longitude')
-
 
       const OpenWeatherMapHelper = require("openweathermap-node");
       const helper = new OpenWeatherMapHelper(
@@ -47,110 +161,55 @@ exports.getWeather = async function (req, res) {
       
     // Configure API parameters
     const params = {
-        wifiAccessPoints: [
-            {
-            macAddress: '1e:76:54:08:00:04',
-            signalStrength: -65,
-            signalToNoiseRatio: 40
-            }
-        ]
-        };
-
+    wifiAccessPoints: [
+        {
+        macAddress: '01:23:45:67:89:AB',
+        signalStrength: -65,
+        signalToNoiseRatio: 40
+        }
+    ]
+    };
     var weatherName, area, currentData;
-    var resp;
+
     // Get data
     geolocation (params, (err, data) => {
     if (err) {
         console.log (err);
         return;
     }
-
+        console.log (data);
         lat = data.location.lat;
         lng = data.location.lng;
-        var ipapi = require('ipapi.co');
-        var s1 = "";
-        var s2 = "";
 
-        var callback = function(res){
-            console.log(res.latitude, res.longitude);
-            lat = res.latitude;
-            lng = res.longitude;
-            
-            helper.getCurrentWeatherByGeoCoordinates(lat, lng,  (err, currentWeather) => {
-                if(err){
-                    console.log(err);
-                    return res.send(response(baseResponse.EMPTY_WEATHER_RESULT));
-                }
-                else{
-                    try {
-                        
-                    console.log(lat, lng);
-                    weatherName = currentWeather.weather[0].description;
-                    area = currentWeather.name;
-                    weather = async function (res) {
-                        try {
-                            const [checkStatus] = await musicProvider.existWeather();
-                            console.log(checkStatus);
-                            console.log("res>>>", res);
-                                                   // 오늘의 날씨 저장된게 없으면 -------수정
-                        if (checkStatus.exist == 0) {
-                            try {
-                                const addWeather = await musicService.setWeather( weatherName, area);
-                                console.log("날씨 저장 성공");
-                                
-                            } catch (error) {
-                                console.log("error2", error);
-                            }
-                            
-                        } else {
-                            try {
-                                const updateWeather = await musicService.updateWeather(weatherName, area);
-                                console.log("날씨 업뎃 성공");
-
-                            } catch (error) {
-                                console.log("error3", error);
-                            }
-                            
-                        }
-
-                    } catch (error) {
-                        console.log("error1", error);
+        helper.getCurrentWeatherByGeoCoordinates(lat, lng, (err, currentWeather) => {
+            if(err){
+                console.log(err);
+                return res.send(response(baseResponse.EMPTY_WEATHER_RESULT));
+            }
+            else{
+                console.log(currentWeather);
+                weatherName = currentWeather.weather[0].description;
+                area = currentWeather.name;
+                weather = async function (req, res) {
+                    const [checkStatus] = await musicProvider.existWeather();
+                    console.log(checkStatus);
+                   
+                    // 오늘의 날씨 저장된게 없으면 -------수정
+                    if (checkStatus.exist == 0) {
+                        const addWeather = await musicService.setWeather(weatherName, area);
+                        console.log("날씨 저장 성공");
+                    } else {
+                        const updateWeather = await musicService.updateWeather(weatherName, area);
+                        console.log("날씨 업뎃 성공");
                     }
                 }
-                
-                //return res.send(response({ "isSuccess": true, "code": 1000, "message":"날씨 조회 성공"}, currentData)); 
-                
-                // setTimeout(async function(){
-                //     try {
-                //         return res.send(response({ "isSuccess": true, "code": 1000, "message":"날씨 조회 성공"}, currentData));  
-                
-                //     } catch (error) {
-                //         console.error("error4", error);
-                //     }
-                    
-                //     }, 3000);
-    
                 weather();
-
-
-   
-
-                } catch (error) {
-                    console.log("error5",error);
-                }
-                // setTimeout(async function(){
-                //     console.log(currentWeather);
-                //     console.log("res">> res);
-                //     return res.send({ "isSuccess": true, "code": 1000, "message":"날씨 조회 성공"}, currentWeather);
-                // }, 3000);
-   
-                }});
-        };
-        ipapi.location(callback);
-           
+                return res.send(response({ "isSuccess": true, "code": 1000, "message":"날씨 조회 성공" }, currentWeather));
+            }
+        });
     });
-};
 
+};
 
 /**
  * API No. 4

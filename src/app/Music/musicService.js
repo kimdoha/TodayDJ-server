@@ -87,6 +87,7 @@ exports.updateWeather = async function (weatherName, area) {
         console.log(`추가된 회원 : ${weatherResult.insertId}`)
         connection.release();
         return ;
+        
 
     } catch (err) {
         logger.error(`App - UpdateWeather Service error\n: ${err.message}`);

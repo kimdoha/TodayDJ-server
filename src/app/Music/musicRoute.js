@@ -3,7 +3,7 @@ module.exports = function(app){
     const jwtMiddleware = require('../../../config/jwtMiddleware');
 
     // 1. 날씨 조회 (회원가입) API
-    //app.get('/weather',music.getWeather); 
+    app.get('/weather',music.getWeather); 
 
     // 2. 날씨별 + 기분별 음악 정보 조회 [캘린더 팝업 화면]
     app.get('/music/year/:year/mon/:mon/day/:day',music.getMusicList); 
