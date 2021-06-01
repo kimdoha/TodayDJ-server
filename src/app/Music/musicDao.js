@@ -532,7 +532,7 @@ async function playlistTotal(connection) {
 
 async function isExistWeatherMusic(connection) {
   const existQuery = `
-  SELECT EXISTS(SELECT *
+    SELECT EXISTS(SELECT *
     FROM LikeTB l
     INNER JOIN Recommend R on l.recomId = R.recomId
     WHERE DATE(l.createAt) = CURRENT_DATE AND type = 0 ) AS exist;
