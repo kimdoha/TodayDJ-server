@@ -63,7 +63,7 @@ exports.updateFolder = async function (folderId, folderName) {
 };
 
 // 날씨 설정
-exports.setWeather = async function (weatherName, area) {
+exports.setWeather = async function ( weatherName, area) {
     try {
 
         const connection = await pool.getConnection(async (conn) => conn);
@@ -71,8 +71,7 @@ exports.setWeather = async function (weatherName, area) {
         const weatherResult = await musicDao.setWeather(connection, weatherName, area);
         console.log(`추가된 회원 : ${weatherResult.insertId}`)
         connection.release();
-        return;
-
+        return ;
     } catch (err) {
         logger.error(`App - SetWeather Service error\n: ${err.message}`);
         return errResponse(baseResponse.DB_ERROR);
@@ -87,7 +86,7 @@ exports.updateWeather = async function (weatherName, area) {
         const weatherResult = await musicDao.updateWeather(connection, weatherName, area);
         console.log(`추가된 회원 : ${weatherResult.insertId}`)
         connection.release();
-        return;
+        return ;
 
     } catch (err) {
         logger.error(`App - UpdateWeather Service error\n: ${err.message}`);

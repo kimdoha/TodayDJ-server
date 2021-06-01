@@ -476,3 +476,24 @@ exports.retrievePlaylistTotal = async function () {
 
   return playlistResult;
 };
+
+
+
+exports.isExistWeatherMusic = async function () {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const [existResult] = await musicDao.isExistWeatherMusic(connection);
+
+  connection.release();
+
+  return existResult;
+}
+
+
+exports.isExistFeelingMusic = async function () {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const [existResult] = await musicDao.isExistFeelingMusic(connection);
+
+  connection.release();
+
+  return existResult;
+}

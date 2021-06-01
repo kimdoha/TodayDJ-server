@@ -46,9 +46,13 @@ module.exports = {
     EMPTY_PLAYLIST2_RESULT : { "isSuccess": false, "code": 3013, "message": "해당 날씨의 추천된 노래가 없습니다." },
     EMPTY_PLAYLIST_RESULT : { "isSuccess": false, "code": 3014, "message": "좋아요 누른 노래가 없습니다." },
 
+    
+
     // youtube
     RECOMMENDID_RESULT : { "isSuccess": false, "code": 3015, "message": "musicId로 추천 노래가 없습니다." },
     YOUTUBE_RESULT : { "isSuccess": false, "code": 3016, "message": "YOUTUBE 정보를 불러 올 수 없습니다." },
+    ISEXIST_RESULT : { "isSuccess": false, "code": 3017, "message": "이미 추천받았습니다." },
+
     DB_ERROR : { "isSuccess": false, "code": 4000, "message": "데이터 베이스 에러"},
     SERVER_ERROR : { "isSuccess": false, "code": 4001, "message": "서버 에러"},
  

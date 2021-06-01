@@ -5,8 +5,8 @@ const baseResponse = require("../../../config/baseResponseStatus");
 const {response, errResponse} = require("../../../config/response");
 
 const regexEmail = require("regex-email");
-const {emit} = require("nodemon");
-const { json } = require("express");
+const { emit } = require("nodemon");
+const json = require("express");
 
 /**
  * API No. 1
@@ -29,10 +29,9 @@ exports.getWeather = async function (req, res) {
     // };
     // var callback2 = function(res){
     //     //console.log(res);
-    //     lngg = res;  
     // };
 
-    // // console.log(ipapi.location(callback));
+    // // // console.log(ipapi.location(callback));
     // ipapi.location(callback1, '', '', 'latitude');
     // ipapi.location(callback2, '', '', 'longitude')
 
@@ -58,7 +57,7 @@ exports.getWeather = async function (req, res) {
         };
 
     var weatherName, area, currentData;
-
+    var resp;
     // Get data
     geolocation (params, (err, data) => {
     if (err) {
@@ -68,34 +67,87 @@ exports.getWeather = async function (req, res) {
 
         lat = data.location.lat;
         lng = data.location.lng;
+        var ipapi = require('ipapi.co');
+        var s1 = "";
+        var s2 = "";
 
-        helper.getCurrentWeatherByGeoCoordinates(lat, lng, (err, currentWeather) => {
-            if(err){
-                console.log(err);
-                return res.send(response(baseResponse.EMPTY_WEATHER_RESULT));
-            }
-            else{
-                console.log(lat, lng);
-                weatherName = currentWeather.weather[0].description;
-                area = currentWeather.name;
-                weather = async function (req, res) {
-                    const [checkStatus] = await musicProvider.existWeather();
-                    console.log(checkStatus);
-                   
-                    // 오늘의 날씨 저장된게 없으면 -------수정
-                    if (checkStatus.exist == 0) {
-                        const addWeather = await musicService.setWeather(weatherName, area);
-                        console.log("날씨 저장 성공");
-                    } else {
-                        const updateWeather = await musicService.updateWeather(weatherName, area);
-                        console.log("날씨 업뎃 성공");
+        var callback = function(res){
+            console.log(res.latitude, res.longitude);
+            lat = res.latitude;
+            lng = res.longitude;
+            
+            helper.getCurrentWeatherByGeoCoordinates(lat, lng,  (err, currentWeather) => {
+                if(err){
+                    console.log(err);
+                    return res.send(response(baseResponse.EMPTY_WEATHER_RESULT));
+                }
+                else{
+                    try {
+                        
+                    console.log(lat, lng);
+                    weatherName = currentWeather.weather[0].description;
+                    area = currentWeather.name;
+                    weather = async function (res) {
+                        try {
+                            const [checkStatus] = await musicProvider.existWeather();
+                            console.log(checkStatus);
+                            console.log("res>>>", res);
+                                                   // 오늘의 날씨 저장된게 없으면 -------수정
+                        if (checkStatus.exist == 0) {
+                            try {
+                                const addWeather = await musicService.setWeather( weatherName, area);
+                                console.log("날씨 저장 성공");
+                                
+                            } catch (error) {
+                                console.log("error2", error);
+                            }
+                            
+                        } else {
+                            try {
+                                const updateWeather = await musicService.updateWeather(weatherName, area);
+                                console.log("날씨 업뎃 성공");
+
+                            } catch (error) {
+                                console.log("error3", error);
+                            }
+                            
+                        }
+
+                    } catch (error) {
+                        console.log("error1", error);
                     }
                 }
-                weather();
                 
-                return res.send(response({ "isSuccess": true, "code": 1000, "message":"날씨 조회 성공" }, currentWeather));
-            }
-        });
+                //return res.send(response({ "isSuccess": true, "code": 1000, "message":"날씨 조회 성공"}, currentData)); 
+                
+                // setTimeout(async function(){
+                //     try {
+                //         return res.send(response({ "isSuccess": true, "code": 1000, "message":"날씨 조회 성공"}, currentData));  
+                
+                //     } catch (error) {
+                //         console.error("error4", error);
+                //     }
+                    
+                //     }, 3000);
+    
+                weather();
+
+
+   
+
+                } catch (error) {
+                    console.log("error5",error);
+                }
+                // setTimeout(async function(){
+                //     console.log(currentWeather);
+                //     console.log("res">> res);
+                //     return res.send({ "isSuccess": true, "code": 1000, "message":"날씨 조회 성공"}, currentWeather);
+                // }, 3000);
+   
+                }});
+        };
+        ipapi.location(callback);
+           
     });
 };
 
@@ -143,7 +195,11 @@ exports.getWeather = async function (req, res) {
  */
 
 exports.weatherMusics = async function (req, res) {
+    const isExist= await musicProvider.isExistWeatherMusic();
+    if(isExist.exist === 1)
+        return res.send(response(baseResponse.ISEXIST_RESULT ));
 
+    
     const weather = await musicProvider.retrieveWeather();
     if(!weather)
         return res.send(response(baseResponse.EMPTY_WEATHER_RESULT));
@@ -258,6 +314,10 @@ exports.weatherMusics = async function (req, res) {
  */
 // 익사이팅 해피 쏘쏘 새드 앵그리 (1, 2, 3, 4, 5)
 exports.feelingMusics = async function (req, res) {
+
+    const isExist= await musicProvider.isExistFeelingMusic();
+    if(isExist.exist === 1)
+        return res.send(response(baseResponse.ISEXIST_RESULT ));
 
     const feeling = await musicProvider.retrieveFeeling();
     if(!feeling || !feeling.feeling)

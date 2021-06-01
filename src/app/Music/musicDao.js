@@ -530,6 +530,29 @@ async function playlistTotal(connection) {
   return existRow;
 }
 
+async function isExistWeatherMusic(connection) {
+  const existQuery = `
+  SELECT EXISTS(SELECT *
+    FROM LikeTB l
+    INNER JOIN Recommend R on l.recomId = R.recomId
+    WHERE DATE(l.createAt) = CURRENT_DATE AND type = 0 ) AS exist;
+                `;
+  const [existRows] = await connection.query(existQuery);
+  return existRows;
+}
+
+
+async function isExistFeelingMusic(connection) {
+  const existQuery = `
+  SELECT EXISTS(SELECT *
+    FROM LikeTB l
+    INNER JOIN Recommend R on l.recomId = R.recomId
+    WHERE DATE(l.createAt) = CURRENT_DATE AND type = 1 ) AS exist;
+                `;
+  const [existRows] = await connection.query(existQuery);
+  return existRows;
+}
+
 
 module.exports = {
   existFolder,
@@ -584,6 +607,8 @@ module.exports = {
   playlistWeather5,
   playlistWeather6,
   playlistWeather7,
-  playlistTotal
+  playlistTotal,
+  isExistWeatherMusic,
+  isExistFeelingMusic
 
 };
